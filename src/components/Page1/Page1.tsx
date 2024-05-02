@@ -141,7 +141,7 @@ export default function Page1() {
                 ampm={false}
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
-                maxDateTime={dateFrom}
+                maxDateTime={dateTo}
                 label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
                 value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                 onChange={(newValue) => {
@@ -157,7 +157,7 @@ export default function Page1() {
                 ampm={false}
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
-                minDateTime={dateTo}
+                minDateTime={dateFrom}
                 label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
                 value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                 onChange={(newValue) => {
