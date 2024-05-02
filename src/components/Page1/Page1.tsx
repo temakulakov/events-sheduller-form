@@ -12,7 +12,7 @@ import {
     durationState,
     eventTypeState, placesState, requisitesState, roomEventState, roomsState,
     titleState, typeContractEventState, typeEventState,
-    userState, publishEventState, publishState, commentsState, todoState, techState, fioState
+    userState, publishEventState, publishState, commentsState, todoState, techState, fioState, descriptionState
 } from "../../store/atoms";
 import 'dayjs/locale/ru';
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
@@ -57,6 +57,7 @@ export default function Page1() {
     const [todo, setTodo] = useRecoilState(todoState);
     const [tech, setTech] = useRecoilState(techState)
     const [fio, setFio] = useRecoilState(fioState)
+    const [description, setDescription] = useRecoilState(descriptionState)
 
 // Данные для новой сделки
     const dealData: DealFields = {
@@ -80,6 +81,8 @@ export default function Page1() {
         UF_CRM_DEAL_1712138530562: todo,
         UF_CRM_1714648360: fio,
         ASSIGNED_BY_ID: 1762,
+        CREATED_BY: selectedUsers[0],
+        ADDITIONAL_INFO: description
     };
 
 // Функция для отправки запроса
@@ -166,6 +169,13 @@ export default function Page1() {
                 format="DD.MM.YYYY HH:mm"
             />
         </LocalizationProvider>
+        <TextareaAutosize
+            placeholder={'Дополнительная информация'}
+            minRows={5}
+            value={description}
+
+            onChange={(e) => setDescription(e.target.value)}
+        />
         <Autocomplete
             id={'UF_CRM_DEAL_1712137914328'}
             renderInput={(params) => <TextField {...params} label="Тип события"/>}

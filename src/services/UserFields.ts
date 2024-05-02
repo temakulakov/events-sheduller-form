@@ -12,7 +12,7 @@ const fetchUserFields = async (): Promise<UserField[]> => {
                 title: item.VALUE
             }))
         }))
-}
+};
 
 export const useUserFields = () => {
     return useQuery({queryKey: ['userFields'], queryFn: fetchUserFields});
