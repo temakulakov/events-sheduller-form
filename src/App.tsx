@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import styles from './App.module.scss'
 import Page1 from "./components/Page1/Page1";
-import {useUsers} from "./services/Users";
 import {
     departmentEventState,
     publishEventState,
-    roomEventState,
+    roomEventState, techState,
     typeContractEventState,
     typeEventState
 } from "./store/atoms";
@@ -20,6 +19,7 @@ function App() {
     const [ rooms, setRooms] = useRecoilState(roomEventState);
     const [contract, setContract] = useRecoilState(typeContractEventState)
     const [publish, setPublish] = useRecoilState(publishEventState)
+
     useEffect(() => {
         if (!error && userFields) {
             userFields.forEach((element, index) => {

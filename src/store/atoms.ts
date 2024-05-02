@@ -41,6 +41,54 @@ export const departmentState = atom<EventDepartment | null>({
     default: null, // default value (aka initial value)
 });
 
+export const roomsState = atom<EventType[]>({
+    key: 'roomsState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+});
+
+export const placesState = atom<number | "">({
+    key: 'placesState', // unique ID (with respect to other atoms/selectors)
+    default: "", // default value (aka initial value)
+});
+
+export const contractState = atom<EventType | null>({
+    key: 'contractState', // unique ID (with respect to other atoms/selectors)
+    default: null, // default value (aka initial value)
+});
+
+export const costState = atom<number | "">({
+    key: 'costState', // unique ID (with respect to other atoms/selectors)
+    default: "", // default value (aka initial value)
+});
+
+export const requisitesState = atom<string>({
+    key: 'requisitesState', // unique ID (with respect to other atoms/selectors)
+    default: '', // default value (aka initial value)
+});
+
+export const publishState = atom<EventType[]>({
+    key: 'publishState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+});
+
+export const commentsState = atom<string>({
+    key: 'commentsState', // unique ID (with respect to other atoms/selectors)
+    default: "", // default value (aka initial value)
+});
+
+
+export const todoState = atom<string>({
+    key: 'todoState', // unique ID (with respect to other atoms/selectors)
+    default: "", // default value (aka initial value)
+});
+
+export const techState = atom<boolean>({
+    key: 'techState',
+    default: false,
+})
+
+
+
 
 // Массивы полей пользовательских типов crm
 

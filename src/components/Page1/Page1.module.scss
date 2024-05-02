@@ -3,3 +3,11 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.checkbox {
+    display: flex;
+    height: fit-content;
+    p {
+        font-family: Arial;
+    }
+}
