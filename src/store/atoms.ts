@@ -92,6 +92,10 @@ export const fioState = atom<string>({
     default: '',
 })
 
+export const additionalTech = atom<string>({
+    key: 'additionalTech',
+    default: '',
+})
 
 
 

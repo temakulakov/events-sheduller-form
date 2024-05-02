@@ -62,7 +62,8 @@ interface DealFields {
     UF_CRM_DEAL_1712138132003: number[]; // Используемые залы
     UF_CRM_DEAL_1712138182738: number; // Количество мест
     UF_CRM_DEAL_1712138239034: number; // Вид договора
-    UF_CRM_DEAL_1712138296842: number; // Цена в рублях
+    OPPORTUNITY: number; // Цена в рублях
+    // UF_CRM_DEAL_1712138296842: number; // Цена в рублях
     UF_CRM_DEAL_1712138336714: string; // Реквизиты
     UF_CRM_DEAL_1712138395258: number[]; // Площадки для публикаций
     UF_CRM_DEAL_1712138457130: 'Y' | 'N'; // Требуется ли техническое сопровождение
@@ -72,4 +73,5 @@ interface DealFields {
     ASSIGNED_BY_ID: 1762;
     CREATED_BY: number;
     ADDITIONAL_INFO: string;
+    UF_CRM_1714654129: string;
 }

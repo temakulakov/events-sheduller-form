@@ -7,12 +7,27 @@ import {
     costState,
     contractState,
     dateFromState,
-    dateToState, departmentEventState,
+    dateToState,
+    departmentEventState,
     departmentState,
     durationState,
-    eventTypeState, placesState, requisitesState, roomEventState, roomsState,
-    titleState, typeContractEventState, typeEventState,
-    userState, publishEventState, publishState, commentsState, todoState, techState, fioState, descriptionState
+    eventTypeState,
+    placesState,
+    requisitesState,
+    roomEventState,
+    roomsState,
+    titleState,
+    typeContractEventState,
+    typeEventState,
+    userState,
+    publishEventState,
+    publishState,
+    commentsState,
+    todoState,
+    techState,
+    fioState,
+    descriptionState,
+    additionalTech
 } from "../../store/atoms";
 import 'dayjs/locale/ru';
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
@@ -23,11 +38,7 @@ import {DealFields} from "../../types";
 import axios from "axios";
 
 
-
-
-
 export default function Page1() {
-
 
 
 // Вызов функции добавления сделки
@@ -58,6 +69,7 @@ export default function Page1() {
     const [tech, setTech] = useRecoilState(techState)
     const [fio, setFio] = useRecoilState(fioState)
     const [description, setDescription] = useRecoilState(descriptionState)
+    const [addTech, setAddTech] = useRecoilState(additionalTech)
 
 // Данные для новой сделки
     const dealData: DealFields = {
@@ -73,7 +85,7 @@ export default function Page1() {
         UF_CRM_DEAL_1712138132003: rooms.map((el) => el.id),
         UF_CRM_DEAL_1712138182738: places !== '' ? places : 0,
         UF_CRM_DEAL_1712138239034: contract ? contract.id : 0,
-        UF_CRM_DEAL_1712138296842: cost !== '' ? cost : 0,
+        OPPORTUNITY: cost !== '' ? cost : 0,
         UF_CRM_DEAL_1712138336714: requisites,
         UF_CRM_DEAL_1712138395258: publish.map((el) => el.id),
         UF_CRM_DEAL_1712138457130: tech ? 'Y' : 'N',
@@ -82,7 +94,8 @@ export default function Page1() {
         UF_CRM_1714648360: fio,
         ASSIGNED_BY_ID: 1762,
         CREATED_BY: selectedUsers[0],
-        ADDITIONAL_INFO: description
+        ADDITIONAL_INFO: description,
+        UF_CRM_1714654129: addTech
     };
 
 // Функция для отправки запроса
@@ -101,12 +114,13 @@ export default function Page1() {
     if (error) return <h1>Ошибка загрузки пользователей</h1>
 
     return <div className={styles.root}>
+        <h1>Создание мероприятия</h1>
         {
             users ? <Autocomplete
                 id={'UF_CRM_1714583071'}
                 renderInput={(params) => <TextField {...params} label="Сотрудники"/>}
                 multiple
-                sx={{width: '500px'}}
+                sx={{width: '100%'}}
                 value={users ? users.filter(user => selectedUsers.includes(user.id)) : []}
                 onChange={(e, users) => {
                     setSelectedUsers([...users.map(user => user.id)]);
@@ -135,60 +149,79 @@ export default function Page1() {
                 setTitle(event.target.value);
             }}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
-            <DateTimePicker
-                // id={'UF_CRM_DEAL_1712137850471'}
-                ampm={false}
-                views={['month', 'day', 'hours', 'minutes']}
-                sx={{width: 350}}
-                maxDateTime={dateTo}
-                label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
-                value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
-                onChange={(newValue) => {
-                    setDateFrom((prev) => {
-                        if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
-                        return newValue;
-                    });
-                }}
-                format="DD.MM.YYYY HH:mm"
-            />
-            <DateTimePicker
-                // id={'UF_CRM_DEAL_1712137877584'}
-                ampm={false}
-                views={['month', 'day', 'hours', 'minutes']}
-                sx={{width: 350}}
-                minDateTime={dateFrom}
-                label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
-                value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
-                onChange={(newValue) => {
-                    setDateTo((prev) => {
-                        if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
-                        return newValue;
-                    });
-                }}
-                format="DD.MM.YYYY HH:mm"
-            />
-        </LocalizationProvider>
-        <TextareaAutosize
-            placeholder={'Дополнительная информация'}
-            minRows={5}
-            value={description}
+        <div className={styles.date}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
+                <DateTimePicker
+                    // id={'UF_CRM_DEAL_1712137850471'}
+                    ampm={false}
+                    views={['month', 'day', 'hours', 'minutes']}
+                    sx={{width: '48%'}}
+                    maxDateTime={dateTo}
+                    label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
+                    value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
+                    onChange={(newValue) => {
+                        setDateFrom((prev) => {
+                            if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
+                            return newValue;
+                        });
+                    }}
+                    format="DD.MM.YYYY HH:mm"
+                />
+                <DateTimePicker
+                    // id={'UF_CRM_DEAL_1712137877584'}
+                    ampm={false}
+                    views={['month', 'day', 'hours', 'minutes']}
+                    sx={{width: '48%'}}
+                    minDateTime={dateFrom}
+                    label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
+                    value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
+                    onChange={(newValue) => {
+                        setDateTo((prev) => {
+                            if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
+                            return newValue;
+                        });
+                    }}
+                    format="DD.MM.YYYY HH:mm"
+                />
+            </LocalizationProvider>
+        </div>
+        <div className={styles.row}>
+            <p>{'Дополнительная информация'}</p>
+            <TextareaAutosize
+                placeholder={''}
+                minRows={5}
+                value={description}
 
-            onChange={(e) => setDescription(e.target.value)}
-        />
-        <Autocomplete
-            id={'UF_CRM_DEAL_1712137914328'}
-            renderInput={(params) => <TextField {...params} label="Тип события"/>}
-            sx={{width: '500px'}}
-            value={eventType}
-            onChange={(e, type) => {
-                setEventType(type);
-            }}
-            options={typeEvent}
-            getOptionLabel={(option) => option.title}
-            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                {option.title}</Box>}
-        />
+                onChange={(e) => setDescription(e.target.value)}
+            />
+        </div>
+        <div className={styles.date}>
+            <Autocomplete
+                id={'UF_CRM_DEAL_1712137914328'}
+                renderInput={(params) => <TextField {...params} label="Тип события"/>}
+                sx={{width: '48%'}}
+                value={eventType}
+                onChange={(e, type) => {
+                    setEventType(type);
+                }}
+                options={typeEvent}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                    {option.title}</Box>}
+            />
+            <Autocomplete
+                renderInput={(params) => <TextField {...params} label="Вид договора"/>}
+                sx={{width: '48%'}}
+                value={contract}
+                onChange={(e, type) => {
+                    setContract(type);
+                }}
+                options={typeContract}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                    {option.title}</Box>}
+            />
+        </div>
         <TextField
             type="number"
             label="Длительность в часах"
@@ -204,91 +237,90 @@ export default function Page1() {
                 max: 100  // Максимальное значение
             }}
         />
-        <Autocomplete
-            renderInput={(params) => <TextField {...params} label="Филиал"/>}
-            sx={{width: '500px'}}
-            value={department}
-            onChange={(e, type) => {
-                setDepartment(type);
-            }}
-            options={typeDepartment}
-            getOptionLabel={(option) => option.title}
-            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                {option.title}</Box>}
-        />
+        <div className={styles.date}>
+            <Autocomplete
+                renderInput={(params) => <TextField {...params} label="Филиал"/>}
+                sx={{width: '48%'}}
+                value={department}
+                onChange={(e, type) => {
+                    setDepartment(type);
+                }}
+                options={typeDepartment}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                    {option.title}</Box>}
+            />
 
-        <Autocomplete
-            renderInput={(params) => <TextField {...params} label="Используемые залы"/>}
-            sx={{width: '500px'}}
-            value={rooms}
-            multiple
-            onChange={(e, rooms) => {
-                setRooms([...rooms]);
-            }}
-            options={typeRooms}
-            getOptionLabel={(option) => option.title}
-            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                {option.title}</Box>}
-        />
+            <Autocomplete
+                renderInput={(params) => <TextField {...params} label="Используемые залы"/>}
+                sx={{width: '48%'}}
+                value={rooms}
+                multiple
+                onChange={(e, rooms) => {
+                    setRooms([...rooms]);
+                }}
+                options={typeRooms}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                    {option.title}</Box>}
+            />
+        </div>
 
-        <TextField
-            type="number"
-            label="Количество мест"
-            variant="outlined"
-            value={places}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const value = event.target.value;
-                setPlaces(value === "" ? value : Number(value));
-            }}
-            inputProps={{
-                step: 1,  // Минимальный шаг изменения значения
-                min: 0,   // Минимальное значение
-                max: 100  // Максимальное значение
-            }}
-        />
+        <div className={styles.date}>
+            <TextField
+                sx={{width: '48%'}}
+                type="number"
+                label="Количество мест"
+                variant="outlined"
+                value={places}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = event.target.value;
+                    setPlaces(value === "" ? value : Number(value));
+                }}
+                inputProps={{
+                    step: 1,  // Минимальный шаг изменения значения
+                    min: 0,   // Минимальное значение
+                    max: 100  // Максимальное значение
+                }}
+            />
 
-        <Autocomplete
-            renderInput={(params) => <TextField {...params} label="Вид договора"/>}
-            sx={{width: '500px'}}
-            value={contract}
-            onChange={(e, type) => {
-                setContract(type);
-            }}
-            options={typeContract}
-            getOptionLabel={(option) => option.title}
-            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                {option.title}</Box>}
-        />
+            <TextField
+                sx={{width: '48%'}}
 
-        <TextField
-            type="number"
-            label="Цена билета"
-            variant="outlined"
-            value={cost}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const value = event.target.value;
-                setCost(value === "" ? value : Number(value));
-            }}
-            inputProps={{
-                step: 1,  // Минимальный шаг изменения значения
-                min: 0,   // Минимальное значение
-                max: 100  // Максимальное значение
-            }}
-        />
+                type="number"
+                label="Цена билета"
+                variant="outlined"
+                value={cost}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = event.target.value;
+                    setCost(value === "" ? value : Number(value));
+                }}
+                inputProps={{
+                    step: 1,  // Минимальный шаг изменения значения
+                    min: 0,   // Минимальное значение
+                    max: 10000  // Максимальное значение
+                }}
+            />
+        </div>
 
 
 
-        <TextareaAutosize
-            placeholder={'Реквизиты'}
-            minRows={5}
-            value={requisites}
 
-            onChange={(e) => setRequisites(e.target.value)}
-        />
+
+        <div className={styles.row}>
+            <p>{'Реквизиты'}</p>
+            <TextareaAutosize
+                placeholder={''}
+                minRows={5}
+                value={requisites}
+
+                onChange={(e) => setRequisites(e.target.value)}
+            />
+        </div>
 
         <Autocomplete
             renderInput={(params) => <TextField {...params} label="Площадки для публикации"/>}
-            sx={{width: '500px'}}
+            sx={{width: '48%'}}
             value={publish}
             multiple
             onChange={(e, publishes) => {
@@ -307,13 +339,16 @@ export default function Page1() {
         {/*    }}*/}
         {/*    minRows={3}*/}
         {/*/>*/}
-        <TextareaAutosize
-            placeholder={'Комментарии'}
+        <div className={styles.row}>
+            <p>{'Комментарии'}</p>
+            <TextareaAutosize
+                placeholder={''}
 
-            minRows={5}
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
-        />
+                minRows={5}
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+            />
+        </div>
         {/*<TextField*/}
         {/*    label="Что будет происходить"*/}
         {/*    value={todo}*/}
@@ -321,22 +356,37 @@ export default function Page1() {
         {/*        setTodo(event.target.value);*/}
         {/*    }}*/}
         {/*/>*/}
-        <TextareaAutosize
-            placeholder={'Что будет происходить'}
-            minRows={5}
-            value={todo}
+        <div className={styles.row}>
+            <p>{'Что будет происходить'}</p>
+            <TextareaAutosize
+                placeholder={''}
+                minRows={5}
+                value={todo}
 
-            onChange={(e) => setTodo(e.target.value)}
-        />
+                onChange={(e) => setTodo(e.target.value)}
+            />
+        </div>
         <div className={styles.checkbox}>
             <Checkbox
                 sx={{width: '8%'}}
                 checked={tech}
                 onChange={() => setTech(!tech)}
-                inputProps={{ 'aria-label': 'controlled' }}
+                inputProps={{'aria-label': 'controlled'}}
             />
             <p>Требуется ли техническое сопровождение</p>
         </div>
-        <Button onClick={addDeal} variant="contained">Отправить</Button>
+        {
+            tech && <div className={styles.row}>
+                <p>{'Что требуется'}</p>
+                <TextareaAutosize
+                    placeholder={'Что требуется'}
+                    minRows={5}
+                    value={addTech}
+                    onChange={(e) => setAddTech(e.target.value)}
+                />
+
+            </div>
+        }
+        <Button onClick={addDeal} sx={{ marginBottom: '20px'}} variant="contained">Отправить</Button>
     </div>
 }

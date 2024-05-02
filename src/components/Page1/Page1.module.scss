@@ -7,7 +7,21 @@
 .checkbox {
     display: flex;
     height: fit-content;
+    align-items: center;
     p {
         font-family: Arial;
+        margin: 0;
     }
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+}
+
+.date {
+    display: flex;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: center;
 }

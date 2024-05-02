@@ -15,6 +15,13 @@ textarea {
   /*transition: border-color 1s ease;*/
 }
 
+p {
+  font-size: 16px;
+  font-family: Arial;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
 textarea:hover {
   border-color: black;
 }
@@ -24,4 +31,15 @@ textarea:focus {
   border-color: #9D2135;
   border: 2px solid #9D2135;
 }
-textarea::placeholder { color: #666666; font-weight: 400; font-size: 16px; font-family: Arial;  }
+textarea::placeholder {
+  color: #666666;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: Arial;
+}
+
+h1 {
+  font-size: 25px;
+  font-family: Arial;
+  margin: 0;
+}
