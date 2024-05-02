@@ -28,30 +28,7 @@ import axios from "axios";
 
 export default function Page1() {
 
-// Данные для новой сделки
-    const dealData: DealFields = {
-        TITLE: "Новая сделка",
-        STAGE_ID: "NEW",
-        COMPANY_ID: 1,
-        CONTACT_ID: 3,
-        OPENED: "Y",
-        ASSIGNED_BY_ID: 1,
-        PROBABILITY: 50,
-        CURRENCY_ID: "USD",
-        OPPORTUNITY: 10000
-    };
 
-// Функция для отправки запроса
-    const addDeal = async () => {
-        try {
-            const response = await axios.post('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.add', {
-                fields: dealData
-            });
-            console.log('Сделка успешно добавлена:', response.data);
-        } catch (error) {
-            console.error('Ошибка при добавлении сделки:', error);
-        }
-    }
 
 // Вызов функции добавления сделки
 
@@ -81,7 +58,40 @@ export default function Page1() {
     const [tech, setTech] = useRecoilState(techState)
     const [fio, setFio] = useRecoilState(fioState)
 
+// Данные для новой сделки
+    const dealData: DealFields = {
+        TITLE: title,
+        CATEGORY_ID: 7,
+        STAGE_ID: 'new',
+        UF_CRM_1714583071: selectedUsers,
+        UF_CRM_DEAL_1712137850471: dateFrom.format('YYYY-MM-DD HH:mm'),
+        UF_CRM_DEAL_1712137877584: dateTo.format('YYYY-MM-DD HH:mm'),
+        UF_CRM_DEAL_1712137914328: eventType ? eventType.id : 0,
+        UF_CRM_DEAL_1712137990065: duration ? duration : 0,
+        UF_CRM_DEAL_1712138052482: department ? department.id : 0,
+        UF_CRM_DEAL_1712138132003: rooms.map((el) => el.id),
+        UF_CRM_DEAL_1712138182738: places !== '' ? places : 0,
+        UF_CRM_DEAL_1712138239034: contract ? contract.id : 0,
+        UF_CRM_DEAL_1712138296842: cost !== '' ? cost : 0,
+        UF_CRM_DEAL_1712138336714: requisites,
+        UF_CRM_DEAL_1712138395258: publish.map((el) => el.id),
+        UF_CRM_DEAL_1712138457130: tech ? 'Y' : 'N',
+        UF_CRM_DEAL_1712138504154: comments,
+        UF_CRM_DEAL_1712138530562: todo,
+        UF_CRM_1714648360: fio,
+    };
 
+// Функция для отправки запроса
+    const addDeal = async () => {
+        try {
+            const response = await axios.post('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.add', {
+                fields: dealData
+            });
+            console.log('Сделка успешно добавлена:', response.data);
+        } catch (error) {
+            console.error('Ошибка при добавлении сделки:', error);
+        }
+    }
 
     const {data} = useUserFields()
     if (error) return <h1>Ошибка загрузки пользователей</h1>
@@ -89,6 +99,7 @@ export default function Page1() {
     return <div className={styles.root}>
         {
             users ? <Autocomplete
+                id={'UF_CRM_1714583071'}
                 renderInput={(params) => <TextField {...params} label="Сотрудники"/>}
                 multiple
                 sx={{width: '500px'}}
@@ -113,6 +124,7 @@ export default function Page1() {
             }}
         />
         <TextField
+            id={'TITLE'}
             label="Введите название мероприятия"
             value={title}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,6 +133,7 @@ export default function Page1() {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
             <DateTimePicker
+                // id={'UF_CRM_DEAL_1712137850471'}
                 ampm={false}
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
@@ -136,6 +149,7 @@ export default function Page1() {
                 format="DD.MM.YYYY HH:mm"
             />
             <DateTimePicker
+                // id={'UF_CRM_DEAL_1712137877584'}
                 ampm={false}
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
@@ -152,6 +166,7 @@ export default function Page1() {
             />
         </LocalizationProvider>
         <Autocomplete
+            id={'UF_CRM_DEAL_1712137914328'}
             renderInput={(params) => <TextField {...params} label="Тип события"/>}
             sx={{width: '500px'}}
             value={eventType}
@@ -165,7 +180,7 @@ export default function Page1() {
         />
         <TextField
             type="number"
-            label="Введите число"
+            label="Длительность в часах"
             variant="outlined"
             value={duration}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

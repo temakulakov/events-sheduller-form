@@ -51,12 +51,22 @@ interface UserFieldAPI {
 
 interface DealFields {
     TITLE: string;
-    STAGE_ID: string;
-    COMPANY_ID: number;
-    CONTACT_ID: number;
-    OPENED: string;
-    ASSIGNED_BY_ID: number;
-    PROBABILITY: number;
-    CURRENCY_ID: string;
-    OPPORTUNITY: number;
+    CATEGORY_ID: 7;
+    STAGE_ID: 'new';
+    UF_CRM_1714583071: number[];    // Список ответственных сотрудников
+    UF_CRM_DEAL_1712137850471: string; // Дата начала
+    UF_CRM_DEAL_1712137877584: string; // Дата окончания
+    UF_CRM_DEAL_1712137914328: number; // Тип мероприятия
+    UF_CRM_DEAL_1712137990065: number; // Длительность
+    UF_CRM_DEAL_1712138052482: number; // Отвественный отдел
+    UF_CRM_DEAL_1712138132003: number[]; // Используемые залы
+    UF_CRM_DEAL_1712138182738: number; // Количество мест
+    UF_CRM_DEAL_1712138239034: number; // Вид договора
+    UF_CRM_DEAL_1712138296842: number; // Цена в рублях
+    UF_CRM_DEAL_1712138336714: string; // Реквизиты
+    UF_CRM_DEAL_1712138395258: number[]; // Площадки для публикаций
+    UF_CRM_DEAL_1712138457130: 'Y' | 'N'; // Требуется ли техническое сопровождение
+    UF_CRM_DEAL_1712138504154: string; // Комментарии
+    UF_CRM_DEAL_1712138530562: string; // Что будет происходить
+    UF_CRM_1714648360: string; // ФИО
 }
