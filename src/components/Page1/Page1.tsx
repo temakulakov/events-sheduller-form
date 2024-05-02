@@ -342,9 +342,6 @@ export default function Page1() {
         </div>
 
 
-
-
-
         <div className={styles.row}>
             <p>{'Реквизиты'}</p>
             <TextareaAutosize
@@ -366,6 +363,16 @@ export default function Page1() {
         {/*    minRows={3}*/}
         {/*/>*/}
         <div className={styles.row}>
+            <p>{'Что будет происходить'}</p>
+            <TextareaAutosize
+                placeholder={''}
+                minRows={5}
+                value={todo}
+
+                onChange={(e) => setTodo(e.target.value)}
+            />
+        </div>
+        <div className={styles.row}>
             <p>{'Комментарии'}</p>
             <TextareaAutosize
                 placeholder={''}
@@ -382,16 +389,7 @@ export default function Page1() {
         {/*        setTodo(event.target.value);*/}
         {/*    }}*/}
         {/*/>*/}
-        <div className={styles.row}>
-            <p>{'Что будет происходить'}</p>
-            <TextareaAutosize
-                placeholder={''}
-                minRows={5}
-                value={todo}
 
-                onChange={(e) => setTodo(e.target.value)}
-            />
-        </div>
         <div className={styles.checkbox}>
             <Checkbox
                 sx={{width: '8%'}}
@@ -413,9 +411,10 @@ export default function Page1() {
 
             </div>
         }
-        <Button onClick={addDeal} sx={{ marginBottom: '20px'}} variant="contained">Отправить</Button>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Button onClick={addDeal} sx={{marginBottom: '20px'}} variant="contained">Отправить</Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+                  anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
+            <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
                 Мероприятие успешно зарегистрировано
             </Alert>
         </Snackbar>
