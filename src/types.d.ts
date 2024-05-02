@@ -69,4 +69,5 @@ interface DealFields {
     UF_CRM_DEAL_1712138504154: string; // Комментарии
     UF_CRM_DEAL_1712138530562: string; // Что будет происходить
     UF_CRM_1714648360: string; // ФИО
+    ASSIGNED_BY_ID: 1762;
 }

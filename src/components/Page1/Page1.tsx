@@ -79,6 +79,7 @@ export default function Page1() {
         UF_CRM_DEAL_1712138504154: comments,
         UF_CRM_DEAL_1712138530562: todo,
         UF_CRM_1714648360: fio,
+        ASSIGNED_BY_ID: 1762,
     };
 
 // Функция для отправки запроса
@@ -265,12 +266,14 @@ export default function Page1() {
             }}
         />
 
-        <TextField
-            label="Реквизиты"
+
+
+        <TextareaAutosize
+            placeholder={'Реквизиты'}
+            minRows={5}
             value={requisites}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setRequisites(event.target.value);
-            }}
+
+            onChange={(e) => setRequisites(e.target.value)}
         />
 
         <Autocomplete
