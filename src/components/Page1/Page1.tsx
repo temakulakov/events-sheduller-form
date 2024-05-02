@@ -1,6 +1,16 @@
 import styles from './Page1.module.scss';
-import React from "react";
-import {Autocomplete, Box, Button, Checkbox, TextareaAutosize, TextField, Typography} from "@mui/material";
+import React, {useState} from "react";
+import {
+    Alert,
+    Autocomplete,
+    Box,
+    Button,
+    Checkbox,
+    Snackbar,
+    TextareaAutosize,
+    TextField,
+    Typography
+} from "@mui/material";
 import {useUsers} from "../../services/Users";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -39,7 +49,18 @@ import axios from "axios";
 
 
 export default function Page1() {
+    const [open, setOpen] = useState(false);
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
 // Вызов функции добавления сделки
 
@@ -105,6 +126,7 @@ export default function Page1() {
                 fields: dealData
             });
             console.log('Сделка успешно добавлена:', response.data);
+            handleOpen();
         } catch (error) {
             console.error('Ошибка при добавлении сделки:', error);
         }
@@ -222,21 +244,37 @@ export default function Page1() {
                     {option.title}</Box>}
             />
         </div>
-        <TextField
-            type="number"
-            label="Длительность в часах"
-            variant="outlined"
-            value={duration}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const value = event.target.value;
-                setDuration(value === "" ? value : Number(value));
-            }}
-            inputProps={{
-                step: 1,  // Минимальный шаг изменения значения
-                min: 0,   // Минимальное значение
-                max: 100  // Максимальное значение
-            }}
-        />
+        <div className={styles.date}>
+            <TextField
+                type="number"
+                label="Длительность"
+                variant="outlined"
+                value={duration}
+                sx={{width: '48%'}}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = event.target.value;
+                    setDuration(value === "" ? value : Number(value));
+                }}
+                inputProps={{
+                    step: 1,  // Минимальный шаг изменения значения
+                    min: 0,   // Минимальное значение
+                    max: 100  // Максимальное значение
+                }}
+            />
+            <Autocomplete
+                renderInput={(params) => <TextField {...params} label="Площадки для публикации"/>}
+                sx={{width: '48%'}}
+                value={publish}
+                multiple
+                onChange={(e, publishes) => {
+                    setPublish([...publishes]);
+                }}
+                options={typePublish}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                    {option.title}</Box>}
+            />
+        </div>
         <div className={styles.date}>
             <Autocomplete
                 renderInput={(params) => <TextField {...params} label="Филиал"/>}
@@ -318,19 +356,7 @@ export default function Page1() {
             />
         </div>
 
-        <Autocomplete
-            renderInput={(params) => <TextField {...params} label="Площадки для публикации"/>}
-            sx={{width: '48%'}}
-            value={publish}
-            multiple
-            onChange={(e, publishes) => {
-                setPublish([...publishes]);
-            }}
-            options={typePublish}
-            getOptionLabel={(option) => option.title}
-            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                {option.title}</Box>}
-        />
+
         {/*<TextareaAutosize*/}
         {/*    label="Комментарии"*/}
         {/*    value={comments}*/}
@@ -379,7 +405,7 @@ export default function Page1() {
             tech && <div className={styles.row}>
                 <p>{'Что требуется'}</p>
                 <TextareaAutosize
-                    placeholder={'Что требуется'}
+                    placeholder={''}
                     minRows={5}
                     value={addTech}
                     onChange={(e) => setAddTech(e.target.value)}
@@ -388,5 +414,10 @@ export default function Page1() {
             </div>
         }
         <Button onClick={addDeal} sx={{ marginBottom: '20px'}} variant="contained">Отправить</Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                Мероприятие успешно зарегистрировано
+            </Alert>
+        </Snackbar>
     </div>
 }
