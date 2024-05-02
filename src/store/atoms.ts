@@ -23,7 +23,7 @@ export const dateFromState = atom<Dayjs>({
 });
 export const dateToState = atom<Dayjs>({
     key: 'dateToState', // unique ID (with respect to other atoms/selectors)
-    default: dayjs(), // default value (aka initial value)
+    default: dayjs().add(14, 'day'), // default value (aka initial value)
 });
 
 export const eventTypeState = atom<EventType | null>({

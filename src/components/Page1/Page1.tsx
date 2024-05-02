@@ -205,7 +205,7 @@ export default function Page1() {
             }}
         />
         <Autocomplete
-            renderInput={(params) => <TextField {...params} label="Ответственный отдел"/>}
+            renderInput={(params) => <TextField {...params} label="Филиал"/>}
             sx={{width: '500px'}}
             value={department}
             onChange={(e, type) => {
