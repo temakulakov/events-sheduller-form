@@ -46,3 +46,17 @@ interface UserFieldAPI {
     FIELD_NAME: string;  // FIELD_NAME как строка
     LIST?: ListItemAPI[]; // Массив элементов списка
 }
+
+// Тип для отправки запроса
+
+interface DealFields {
+    TITLE: string;
+    STAGE_ID: string;
+    COMPANY_ID: number;
+    CONTACT_ID: number;
+    OPENED: string;
+    ASSIGNED_BY_ID: number;
+    PROBABILITY: number;
+    CURRENCY_ID: string;
+    OPPORTUNITY: number;
+}

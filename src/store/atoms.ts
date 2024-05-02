@@ -85,6 +85,11 @@ export const todoState = atom<string>({
 export const techState = atom<boolean>({
     key: 'techState',
     default: false,
+});
+
+export const fioState = atom<string>({
+    key: 'fioState',
+    default: '',
 })
 
 

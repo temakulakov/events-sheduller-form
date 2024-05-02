@@ -1,6 +1,6 @@
 import styles from './Page1.module.scss';
 import React from "react";
-import {Autocomplete, Box, Checkbox, TextareaAutosize, TextField, Typography} from "@mui/material";
+import {Autocomplete, Box, Button, Checkbox, TextareaAutosize, TextField, Typography} from "@mui/material";
 import {useUsers} from "../../services/Users";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -12,16 +12,49 @@ import {
     durationState,
     eventTypeState, placesState, requisitesState, roomEventState, roomsState,
     titleState, typeContractEventState, typeEventState,
-    userState, publishEventState, publishState, commentsState, todoState, techState
+    userState, publishEventState, publishState, commentsState, todoState, techState, fioState
 } from "../../store/atoms";
 import 'dayjs/locale/ru';
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {Month, WeekDay} from "../../consts";
 import {useUserFields} from "../../services/UserFields";
+import {DealFields} from "../../types";
+import axios from "axios";
+
+
+
 
 
 export default function Page1() {
+
+// Данные для новой сделки
+    const dealData: DealFields = {
+        TITLE: "Новая сделка",
+        STAGE_ID: "NEW",
+        COMPANY_ID: 1,
+        CONTACT_ID: 3,
+        OPENED: "Y",
+        ASSIGNED_BY_ID: 1,
+        PROBABILITY: 50,
+        CURRENCY_ID: "USD",
+        OPPORTUNITY: 10000
+    };
+
+// Функция для отправки запроса
+    const addDeal = async () => {
+        try {
+            const response = await axios.post('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.add', {
+                fields: dealData
+            });
+            console.log('Сделка успешно добавлена:', response.data);
+        } catch (error) {
+            console.error('Ошибка при добавлении сделки:', error);
+        }
+    }
+
+// Вызов функции добавления сделки
+
     const typeEvent = useRecoilValue(typeEventState);
     const typeDepartment = useRecoilValue(departmentEventState);
     const typeRooms = useRecoilValue(roomEventState);
@@ -46,11 +79,11 @@ export default function Page1() {
     const [comments, setComments] = useRecoilState(commentsState);
     const [todo, setTodo] = useRecoilState(todoState);
     const [tech, setTech] = useRecoilState(techState)
+    const [fio, setFio] = useRecoilState(fioState)
 
 
 
     const {data} = useUserFields()
-    console.log(data)
     if (error) return <h1>Ошибка загрузки пользователей</h1>
 
     return <div className={styles.root}>
@@ -73,6 +106,13 @@ export default function Page1() {
             /> : <div/>
         }
         <TextField
+            label="Введите Ваше ФИО"
+            value={fio}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setFio(event.target.value);
+            }}
+        />
+        <TextField
             label="Введите название мероприятия"
             value={title}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +125,7 @@ export default function Page1() {
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
                 maxDateTime={dateFrom}
-                label={`${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
+                label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
                 value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                 onChange={(newValue) => {
                     setDateFrom((prev) => {
@@ -100,7 +140,7 @@ export default function Page1() {
                 views={['month', 'day', 'hours', 'minutes']}
                 sx={{width: 350}}
                 minDateTime={dateTo}
-                label={`${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
+                label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
                 value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                 onChange={(newValue) => {
                     setDateTo((prev) => {
@@ -231,20 +271,34 @@ export default function Page1() {
             renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
                 {option.title}</Box>}
         />
+        {/*<TextareaAutosize*/}
+        {/*    label="Комментарии"*/}
+        {/*    value={comments}*/}
+        {/*    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
+        {/*        setComments(event.target.value);*/}
+        {/*    }}*/}
+        {/*    minRows={3}*/}
+        {/*/>*/}
         <TextareaAutosize
-            label="Комментарии"
+            placeholder={'Комментарии'}
+
+            minRows={5}
             value={comments}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setComments(event.target.value);
-            }}
-            minRows={3}
+            onChange={(e) => setComments(e.target.value)}
         />
-        <TextField
-            label="Что будет происходить"
+        {/*<TextField*/}
+        {/*    label="Что будет происходить"*/}
+        {/*    value={todo}*/}
+        {/*    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
+        {/*        setTodo(event.target.value);*/}
+        {/*    }}*/}
+        {/*/>*/}
+        <TextareaAutosize
+            placeholder={'Что будет происходить'}
+            minRows={5}
             value={todo}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setTodo(event.target.value);
-            }}
+
+            onChange={(e) => setTodo(e.target.value)}
         />
         <div className={styles.checkbox}>
             <Checkbox
@@ -255,5 +309,6 @@ export default function Page1() {
             />
             <p>Требуется ли техническое сопровождение</p>
         </div>
+        <Button onClick={addDeal} variant="contained">Отправить</Button>
     </div>
 }

@@ -29,8 +29,6 @@ function App() {
                 if (element.id === 172 && element.list) setContract(element.list);
                 if (element.id === 175 && element.list) setPublish(element.list);
             });
-            console.log('rooms')
-            console.log(rooms)
 
         }
     }, [userFields]);
