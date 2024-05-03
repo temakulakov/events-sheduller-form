@@ -223,6 +223,13 @@ export default function Page1() {
                 ) : (
                     <React.Fragment>
                         <div style={{margin: '20px 0'}}>
+                            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
+                                <h1 style={{margin: '0 auto'}}>
+                                    {
+                                        steps[activeStep]
+                                    }
+                                </h1>
+                            </div>
                             {
                                 activeStep === 0 && <div className={styles.root}>
                                     {
@@ -256,6 +263,29 @@ export default function Page1() {
                                     {/*        setFio(event.target.value);*/}
                                     {/*    }}*/}
                                     {/*/>*/}
+
+
+                                    <div className={styles.date}>
+                                        <Autocomplete
+                                            id={'UF_CRM_DEAL_1712137914328'}
+                                            renderInput={(params) => <TextField {...params} label="Тип события"/>}
+                                            sx={{width: '48%'}}
+                                            value={eventType}
+                                            onChange={(e, type) => {
+                                                setEventType(type);
+                                            }}
+                                            options={typeEvent}
+                                            getOptionLabel={(option) => option.title}
+                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                                {option.title}</Box>}
+                                        />
+
+                                        <div style={{width: '48%'}}>
+                                            <h3 style={{margin: 0}}>{`Продолжительность `}</h3>
+                                            <span style={{width: '48%'}}>{duration}</span>
+                                        </div>
+                                    </div>
+
                                     <TextField
                                         id={'TITLE'}
                                         label="Введите название мероприятия"
@@ -299,31 +329,8 @@ export default function Page1() {
                                                 format="DD.MM.YYYY HH:mm"
                                             />
                                         </LocalizationProvider>
-
                                     </div>
-                                    <div className={styles.date}>
-                                        <Autocomplete
-                                            id={'UF_CRM_DEAL_1712137914328'}
-                                            renderInput={(params) => <TextField {...params} label="Тип события"/>}
-                                            sx={{width: '48%'}}
-                                            value={eventType}
-                                            onChange={(e, type) => {
-                                                setEventType(type);
-                                            }}
-                                            options={typeEvent}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-                                        <TextField
-                                            label="Длительность"
-                                            variant="outlined"
-                                            value={duration}
-                                            sx={{width: '48%'}}
 
-                                        />
-
-                                    </div>
                                     <div className={styles.row}>
                                         <p>{'Описание мероприятия'}</p>
                                         <TextareaAutosize
@@ -339,26 +346,7 @@ export default function Page1() {
 
                             {
                                 activeStep === 1 && <div className={styles.root}>
-                                    <div className={styles.row}>
-                                        <p>{'Что будет происходить'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={todo}
 
-                                            onChange={(e) => setTodo(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className={styles.row}>
-                                        <p>{'Комментарии'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-
-                                            minRows={5}
-                                            value={comments}
-                                            onChange={(e) => setComments(e.target.value)}
-                                        />
-                                    </div>
                                     <div className={styles.date}>
                                         <Autocomplete
                                             renderInput={(params) => <TextField {...params} label="Место проведения"/>}
@@ -424,6 +412,28 @@ export default function Page1() {
                                             }}
                                         />
                                     </div>
+                                    <div className={styles.row}>
+                                        <p>{'Что будет происходить'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+                                            minRows={5}
+                                            value={todo}
+
+                                            onChange={(e) => setTodo(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className={styles.row}>
+                                        <p>{'Комментарии'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+
+                                            minRows={5}
+                                            value={comments}
+                                            onChange={(e) => setComments(e.target.value)}
+                                        />
+                                    </div>
+
 
                                     <div className={styles.checkbox}>
                                         <Checkbox
