@@ -1,5 +1,5 @@
 import styles from './Page1.module.scss';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Alert,
     Autocomplete,
@@ -103,6 +103,19 @@ export default function Page1() {
         handleNext();
     };
 
+    useEffect(() => {
+        // Найдите разницу между датами в минутах
+        const minutesDifference = dateTo.diff(dateFrom, 'minute');
+
+// Разделите минуты на 60 для вычисления часов
+        const hours = Math.floor(minutesDifference / 60);
+
+// Остаток минут после вычисления часов
+        const minutes = minutesDifference % 60;
+        setDuration(`${hours} часов ${minutes} минут`);
+    }, [dateFrom, dateTo]);
+
+
     const totalSteps = () => steps.length;
     const completedSteps = () => Object.keys(completed).length;
     const isLastStep = () => activeStep === totalSteps() - 1;
@@ -178,7 +191,6 @@ export default function Page1() {
             const response = await axios.post('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.add', {
                 fields: dealData
             });
-            console.log('Сделка успешно добавлена:', response.data);
             handleOpen();
             setLoading(false)
         } catch (error) {
@@ -290,7 +302,7 @@ export default function Page1() {
                             {
                                 activeStep === 1 && <div className={styles.root}>
                                     <div className={styles.row}>
-                                        <p>{'Дополнительная информация'}</p>
+                                        <p>{'Описание мероприятия'}</p>
                                         <TextareaAutosize
                                             placeholder={''}
                                             minRows={5}
@@ -332,15 +344,7 @@ export default function Page1() {
                                             variant="outlined"
                                             value={duration}
                                             sx={{width: '48%'}}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                const value = event.target.value;
-                                                setDuration(value === "" ? value : value);
-                                            }}
-                                            inputProps={{
-                                                step: 1,  // Минимальный шаг изменения значения
-                                                min: 0,   // Минимальное значение
-                                                max: 100  // Максимальное значение
-                                            }}
+
                                         />
                                         <Autocomplete
                                             renderInput={(params) => <TextField {...params} label="Площадки для публикации"/>}
@@ -499,6 +503,7 @@ export default function Page1() {
                         </div>
                         <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
                             <Button
+                                variant={'outlined'}
                                 color="inherit"
                                 disabled={activeStep === 0}
                                 onClick={handleBack}
@@ -508,9 +513,10 @@ export default function Page1() {
                             </Button>
                             <Box sx={{flex: '1 1 auto'}}/>
                             <Button
+                                variant={'outlined'}
                                 onClick={handleNext}
                                 sx={{mr: 1}}
-                                disabled={isStepValid()}>
+                                disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
                                 Далее
                             </Button>
                         </Box>
