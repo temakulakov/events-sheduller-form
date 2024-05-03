@@ -1,5 +1,3 @@
-import styles from './Page1.module.scss';
-import React, {useEffect, useState} from "react";
 import {
     Alert,
     Autocomplete,
@@ -7,47 +5,49 @@ import {
     Button,
     Checkbox,
     Snackbar, Step, StepButton, Stepper,
-    TextareaAutosize,
     TextField,
+    TextareaAutosize,
     Typography
-} from "@mui/material";
-import {useUsers} from "../../services/Users";
-import {useRecoilState, useRecoilValue} from "recoil";
+} from "@mui/material"
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import axios from "axios"
+import 'dayjs/locale/ru'
+import React, { useEffect, useState } from "react"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { Month, WeekDay } from "../../consts"
+import { useUserFields } from "../../services/UserFields"
+import { useUsers } from "../../services/Users"
 import {
-    costState,
+    additionalTech,
+    commentsState,
     contractState,
+    costState,
     dateFromState,
     dateToState,
     departmentEventState,
     departmentState,
+    descriptionState,
     durationState,
     eventTypeState,
+    fioState,
     placesState,
+    publishEventState,
+    publishState,
     requisitesState,
     roomEventState,
     roomsState,
+    techState,
     titleState,
+    todoState,
     typeContractEventState,
     typeEventState,
-    userState,
-    publishEventState,
-    publishState,
-    commentsState,
-    todoState,
-    techState,
-    fioState,
-    descriptionState,
-    additionalTech
-} from "../../store/atoms";
-import 'dayjs/locale/ru';
-import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {Month, WeekDay} from "../../consts";
-import {useUserFields} from "../../services/UserFields";
-import {DealFields} from "../../types";
-import axios from "axios";
+    userState
+} from "../../store/atoms"
+import { DealFields } from "../../types"
+import styles from './Page1.module.scss'
 
-const steps = ['Мероприятие', 'Договор', 'Место проведения', 'Дополнительная информация'];
+const steps = ['Мероприятие',  'Дополнительная информация', 'Договор'];
 
 export default function Page1() {
     const [open, setOpen] = useState(false);
@@ -125,13 +125,11 @@ export default function Page1() {
     const isStepValid = (): boolean => {
         switch (activeStep) {
             case 0:
-                return (selectedUsers.length === 0 && fio === '') || title === '';
+                return (selectedUsers.length === 0 && fio === '') || title === '' || description === '' || eventType === null;
             case 1:
-                return description === '' || eventType === null || contract === null || duration === '' || publish.length === 0;
+                return   todo === '' || comments === '' || department === null || rooms.length === 0 || places === '' || cost === '';
             case 2:
-                return department === null || rooms.length === 0 || places === '' || cost === '';
-            case 3:
-                return requisites === '' || todo === '' || comments === '';
+                return requisites === '' || publish.length === 0 || contract === null;
             default:
                 return false;
         }
@@ -242,17 +240,22 @@ export default function Page1() {
                                             renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
                                                 <img alt={option.fullName} loading="lazy"
                                                      src={option.avatarUrl ?? 'https://surgassociates.com/wp-content/uploads/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg'}
-                                                     style={{width: '20px', height: '20px', borderRadius: '50%', marginRight: '10px'}}/>
+                                                     style={{
+                                                         width: '20px',
+                                                         height: '20px',
+                                                         borderRadius: '50%',
+                                                         marginRight: '10px'
+                                                     }}/>
                                                 {option.fullName}</Box>}
                                         /> : <div/>
                                     }
-                                    <TextField
-                                        label="Введите Ваше ФИО"
-                                        value={fio}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                            setFio(event.target.value);
-                                        }}
-                                    />
+                                    {/*<TextField*/}
+                                    {/*    label="Введите аше ФИО"*/}
+                                    {/*    value={fio}*/}
+                                    {/*    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                    {/*        setFio(event.target.value);*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
                                     <TextField
                                         id={'TITLE'}
                                         label="Введите название мероприятия"
@@ -296,20 +299,7 @@ export default function Page1() {
                                                 format="DD.MM.YYYY HH:mm"
                                             />
                                         </LocalizationProvider>
-                                    </div>
-                                </div>
-                            }
-                            {
-                                activeStep === 1 && <div className={styles.root}>
-                                    <div className={styles.row}>
-                                        <p>{'Описание мероприятия'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={description}
 
-                                            onChange={(e) => setDescription(e.target.value)}
-                                        />
                                     </div>
                                     <div className={styles.date}>
                                         <Autocomplete
@@ -325,20 +315,6 @@ export default function Page1() {
                                             renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
                                                 {option.title}</Box>}
                                         />
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Вид договора"/>}
-                                            sx={{width: '48%'}}
-                                            value={contract}
-                                            onChange={(e, type) => {
-                                                setContract(type);
-                                            }}
-                                            options={typeContract}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-                                    </div>
-                                    <div className={styles.date}>
                                         <TextField
                                             label="Длительность"
                                             variant="outlined"
@@ -346,27 +322,46 @@ export default function Page1() {
                                             sx={{width: '48%'}}
 
                                         />
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Площадки для публикации"/>}
-                                            sx={{width: '48%'}}
-                                            value={publish}
-                                            multiple
-                                            onChange={(e, publishes) => {
-                                                setPublish([...publishes]);
-                                            }}
-                                            options={typePublish}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
+
+                                    </div>
+                                    <div className={styles.row}>
+                                        <p>{'Описание мероприятия'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+                                            minRows={5}
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
                                         />
                                     </div>
+
                                 </div>
                             }
+
                             {
-                                activeStep === 2 && <div className={styles.root}>
+                                activeStep === 1 && <div className={styles.root}>
+                                    <div className={styles.row}>
+                                        <p>{'Что будет происходить'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+                                            minRows={5}
+                                            value={todo}
+
+                                            onChange={(e) => setTodo(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className={styles.row}>
+                                        <p>{'Комментарии'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+
+                                            minRows={5}
+                                            value={comments}
+                                            onChange={(e) => setComments(e.target.value)}
+                                        />
+                                    </div>
                                     <div className={styles.date}>
                                         <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Филиал"/>}
+                                            renderInput={(params) => <TextField {...params} label="Место проведения"/>}
                                             sx={{width: '48%'}}
                                             value={department}
                                             onChange={(e, type) => {
@@ -429,43 +424,6 @@ export default function Page1() {
                                             }}
                                         />
                                     </div>
-                                </div>
-                            }
-                            {
-                                activeStep === 3 && <div className={styles.root}>
-                                    <div className={styles.row}>
-                                        <p>{'Реквизиты'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={requisites}
-
-                                            onChange={(e) => setRequisites(e.target.value)}
-                                        />
-                                    </div>
-
-
-                                    <div className={styles.row}>
-                                        <p>{'Что будет происходить'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={todo}
-
-                                            onChange={(e) => setTodo(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className={styles.row}>
-                                        <p>{'Комментарии'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-
-                                            minRows={5}
-                                            value={comments}
-                                            onChange={(e) => setComments(e.target.value)}
-                                        />
-                                    </div>
-
 
                                     <div className={styles.checkbox}>
                                         <Checkbox
@@ -488,37 +446,96 @@ export default function Page1() {
 
                                         </div>
                                     }
-                                    <Button
-                                        disabled={isStepValid() || loading}
-                                        onClick={addDeal}
-                                        sx={{marginBottom: '20px'}}
-                                        variant="contained">
-                                        {
-                                            loading ? 'Идет отправка' : 'Отправить'
-                                        }
-                                    </Button>
 
                                 </div>
                             }
+                            {
+                                activeStep === 2 && <div className={styles.root}>
+
+
+                                    <div className={styles.date}>
+                                        <Autocomplete
+                                            renderInput={(params) => <TextField {...params} label="Вид договора"/>}
+                                            sx={{width: '48%'}}
+                                            value={contract}
+                                            onChange={(e, type) => {
+                                                setContract(type);
+                                            }}
+                                            options={typeContract}
+                                            getOptionLabel={(option) => option.title}
+                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                                {option.title}</Box>}
+                                        />
+                                        <Autocomplete
+                                            renderInput={(params) => <TextField {...params}
+                                                                                label="Площадки для публикации"/>}
+                                            sx={{width: '48%'}}
+                                            value={publish}
+                                            multiple
+                                            onChange={(e, publishes) => {
+                                                setPublish([...publishes]);
+                                            }}
+                                            options={typePublish}
+                                            getOptionLabel={(option) => option.title}
+                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                                {option.title}</Box>}
+                                        />
+                                    </div>
+                                    <div className={styles.row}>
+                                        <p>{'Реквизиты'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+                                            minRows={5}
+                                            value={requisites}
+
+                                            onChange={(e) => setRequisites(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            }
+
                         </div>
+
+
+                        {
+                            (activeStep === steps.length - 1) &&
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <Button
+                                    disabled={isStepValid() || loading}
+                                    onClick={addDeal}
+                                    sx={{width: '40%'}}
+                                    variant="contained">
+                                    {
+                                        loading ? 'Идет отправка' : 'Отправить'
+                                    }
+                                </Button>
+                            </div>
+                        }
+
+
                         <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                            <Button
-                                variant={'outlined'}
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                                sx={{mr: 1}}
-                            >
-                                Назад
-                            </Button>
+                            {
+                                (activeStep !== 0) && <Button
+                                    variant={'outlined'}
+                                    color="inherit"
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    sx={{mr: 1}}
+                                >
+                                    Назад
+                                </Button>
+                            }
                             <Box sx={{flex: '1 1 auto'}}/>
-                            <Button
-                                variant={'outlined'}
-                                onClick={handleNext}
-                                sx={{mr: 1}}
-                                disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
-                                Далее
-                            </Button>
+                            {
+                            ((steps.length - 1) !== activeStep) &&  <Button
+                                    variant={'outlined'}
+                                    onClick={handleNext}
+                                    sx={{mr: 1}}
+                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
+                                    Далее
+                                </Button>
+                            }
+
                         </Box>
                     </React.Fragment>
                 )}
