@@ -180,7 +180,7 @@ export default function Page1() {
         UF_CRM_1714648360: fio,
         ASSIGNED_BY_ID: 1762,
         CREATED_BY: selectedUsers[0],
-        ADDITIONAL_INFO: description,
+        UF_CRM_DEAL_1712137787958: description,
         UF_CRM_1714654129: addTech
     };
 

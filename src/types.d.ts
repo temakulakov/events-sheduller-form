@@ -77,6 +77,6 @@ interface DealFields {
     UF_CRM_1714648360: string; // ФИО
     ASSIGNED_BY_ID: 1762;
     CREATED_BY: number;
-    ADDITIONAL_INFO: string;
+    UF_CRM_DEAL_1712137787958: string;
     UF_CRM_1714654129: string;
 }
