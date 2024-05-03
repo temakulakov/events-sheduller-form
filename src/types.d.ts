@@ -1,3 +1,6 @@
+import {useRecoilValue} from "recoil";
+import {departmentEventState, roomEventState, typeContractEventState} from "./store/atoms";
+
 export interface User {
     id: number;
     fullName: string;
@@ -47,6 +50,8 @@ interface UserFieldAPI {
     LIST?: ListItemAPI[]; // Массив элементов списка
 }
 
+
+
 // Тип для отправки запроса
 
 interface DealFields {
@@ -57,7 +62,7 @@ interface DealFields {
     UF_CRM_DEAL_1712137850471: string; // Дата начала
     UF_CRM_DEAL_1712137877584: string; // Дата окончания
     UF_CRM_DEAL_1712137914328: number; // Тип мероприятия
-    UF_CRM_DEAL_1712137990065: number; // Длительность
+    UF_CRM_1714663307: string; // Длительность
     UF_CRM_DEAL_1712138052482: number; // Отвественный отдел
     UF_CRM_DEAL_1712138132003: number[]; // Используемые залы
     UF_CRM_DEAL_1712138182738: number; // Количество мест

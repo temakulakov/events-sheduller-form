@@ -31,7 +31,7 @@ export const eventTypeState = atom<EventType | null>({
     default: null, // default value (aka initial value)
 });
 
-export const durationState = atom<number | "">({
+export const durationState = atom<string>({
     key: 'durationState', // unique ID (with respect to other atoms/selectors)
     default: "", // default value (aka initial value)
 });
