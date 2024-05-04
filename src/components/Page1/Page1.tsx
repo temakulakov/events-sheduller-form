@@ -63,8 +63,12 @@ export default function Page1() {
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         const paramValue = searchParams.get('local');
+        const user = searchParams.get('user');
         if (paramValue == 'true') {
             setLocal(true);
+        }
+        if (user) {
+            setSelectedUsers([Number(user)]);
         }
     }, []);
 
@@ -265,7 +269,7 @@ export default function Page1() {
                                                  }}/>
                                             {option.fullName}</Box>}
                                     />) : <TextField
-                                        label="Введите аше ФИО"
+                                        label="Введите ваше ФИО"
                                         value={fio}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             setFio(event.target.value);
