@@ -9,15 +9,15 @@ import {
     TextareaAutosize,
     Typography
 } from "@mui/material"
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers"
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 import axios from "axios"
 import 'dayjs/locale/ru'
-import React, { useEffect, useState } from "react"
-import { useRecoilState, useRecoilValue } from "recoil"
-import { Month, WeekDay } from "../../consts"
-import { useUserFields } from "../../services/UserFields"
-import { useUsers } from "../../services/Users"
+import React, {useEffect, useState} from "react"
+import {useRecoilState, useRecoilValue} from "recoil"
+import {Month, WeekDay} from "../../consts"
+import {useUserFields} from "../../services/UserFields"
+import {useUsers} from "../../services/Users"
 import {
     additionalTech,
     commentsState,
@@ -44,20 +44,29 @@ import {
     typeEventState,
     userState
 } from "../../store/atoms"
-import { DealFields } from "../../types"
+import {DealFields} from "../../types"
 import styles from './Page1.module.scss'
 
-const steps = ['Мероприятие',  'Дополнительная информация', 'Договор'];
+const steps = ['Мероприятие', 'Дополнительная информация', 'Договор'];
 
 export default function Page1() {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false)
     const [activeStep, setActiveStep] = useState(0);
     const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
+    const [ local, setLocal ] = useState<boolean>(false);
 
     const handleOpen = () => {
         setOpen(true);
     };
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const paramValue = searchParams.get('local');
+        if (paramValue == 'true') {
+            setLocal(true);
+        }
+    }, []);
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -127,7 +136,7 @@ export default function Page1() {
             case 0:
                 return (selectedUsers.length === 0 && fio === '') || title === '' || description === '' || eventType === null;
             case 1:
-                return   todo === '' || comments === '' || department === null || rooms.length === 0 || places === '' || cost === '';
+                return todo === '' || comments === '' || department === null || rooms.length === 0 || places === '' || cost === '';
             case 2:
                 return requisites === '' || publish.length === 0 || contract === null;
             default:
@@ -199,362 +208,364 @@ export default function Page1() {
     const {data} = useUserFields()
     if (error) return <h1>Ошибка загрузки пользователей</h1>
 
-        return <Box sx={{width: '100%'}}>
-            <Stepper nonLinear activeStep={activeStep} >
-                {steps.map((label, index) => (
-                    <Step key={label} completed={completed[index]}>
-                        <StepButton color="inherit" style={index === 0 ? { padding: '16px', paddingLeft: '12px'} : { padding: '16px'}}>
-                            {label}
-                        </StepButton>
-                    </Step>
-                ))}
-            </Stepper>
-            <div>
-                {allStepsCompleted() ? (
-                    <React.Fragment>
-                        <Typography sx={{mt: 2, mb: 1}}>
-                            All steps completed - you&apos;re finished
-                        </Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                            <Box sx={{flex: '1 1 auto'}}/>
-                            <Button onClick={handleReset}>Reset</Button>
-                        </Box>
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment>
-                        <div style={{margin: '20px 0'}}>
-                            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
-                                <h1 style={{margin: '0 auto'}}>
-                                    {
-                                        steps[activeStep]
-                                    }
-                                </h1>
-                            </div>
-                            {
-                                activeStep === 0 && <div className={styles.root}>
-                                    {
-                                        users ? <Autocomplete
-                                            id={'UF_CRM_1714583071'}
-                                            renderInput={(params) => <TextField {...params} label="Сотрудники"/>}
-                                            multiple
-                                            sx={{width: '100%'}}
-                                            value={users ? users?.filter(user => selectedUsers.includes(user.id)) : []}
-                                            onChange={(e, users) => {
-                                                setSelectedUsers([...users.map(user => user.id)]);
-                                            }}
-                                            options={users}
-                                            getOptionLabel={(option) => option.fullName}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                <img alt={option.fullName} loading="lazy"
-                                                     src={option.avatarUrl ?? 'https://surgassociates.com/wp-content/uploads/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg'}
-                                                     style={{
-                                                         width: '20px',
-                                                         height: '20px',
-                                                         borderRadius: '50%',
-                                                         marginRight: '10px'
-                                                     }}/>
-                                                {option.fullName}</Box>}
-                                        /> : <div/>
-                                    }
-                                    {/*<TextField*/}
-                                    {/*    label="Введите аше ФИО"*/}
-                                    {/*    value={fio}*/}
-                                    {/*    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                    {/*        setFio(event.target.value);*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
-
-
-                                    <div className={styles.date}>
-                                        <Autocomplete
-                                            id={'UF_CRM_DEAL_1712137914328'}
-                                            renderInput={(params) => <TextField {...params} label="Тип события"/>}
-                                            sx={{width: '48%'}}
-                                            value={eventType}
-                                            onChange={(e, type) => {
-                                                setEventType(type);
-                                            }}
-                                            options={typeEvent}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-
-                                        <div style={{width: '48%'}}>
-                                            <h3 style={{margin: 0}}>{`Продолжительность `}</h3>
-                                            <span style={{width: '48%'}}>{duration}</span>
-                                        </div>
-                                    </div>
-
-                                    <TextField
-                                        id={'TITLE'}
-                                        label="Введите название мероприятия"
-                                        value={title}
+    return <Box sx={{width: '100%'}}>
+        <Stepper nonLinear activeStep={activeStep}>
+            {steps.map((label, index) => (
+                <Step key={label} completed={completed[index]}>
+                    <StepButton color="inherit"
+                                style={index === 0 ? {padding: '16px', paddingLeft: '12px'} : {padding: '16px'}}>
+                        {label}
+                    </StepButton>
+                </Step>
+            ))}
+        </Stepper>
+        <div>
+            {allStepsCompleted() ? (
+                <React.Fragment>
+                    <Typography sx={{mt: 2, mb: 1}}>
+                        All steps completed - you&apos;re finished
+                    </Typography>
+                    <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                        <Box sx={{flex: '1 1 auto'}}/>
+                        <Button onClick={handleReset}>Reset</Button>
+                    </Box>
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <div style={{margin: '20px 0'}}>
+                        <div style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
+                            <h1 style={{margin: '0 auto'}}>
+                                {
+                                    steps[activeStep]
+                                }
+                            </h1>
+                        </div>
+                        {
+                            activeStep === 0 && <div className={styles.root}>
+                                {
+                                    local ? (users && <Autocomplete
+                                        id={'UF_CRM_1714583071'}
+                                        renderInput={(params) => <TextField {...params} label="Сотрудники"/>}
+                                        multiple
+                                        sx={{width: '100%'}}
+                                        value={users ? users?.filter(user => selectedUsers.includes(user.id)) : []}
+                                        onChange={(e, users) => {
+                                            setSelectedUsers([...users.map(user => user.id)]);
+                                        }}
+                                        options={users}
+                                        getOptionLabel={(option) => option.fullName}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            <img alt={option.fullName} loading="lazy"
+                                                 src={option.avatarUrl ?? 'https://surgassociates.com/wp-content/uploads/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg'}
+                                                 style={{
+                                                     width: '20px',
+                                                     height: '20px',
+                                                     borderRadius: '50%',
+                                                     marginRight: '10px'
+                                                 }}/>
+                                            {option.fullName}</Box>}
+                                    />) : <TextField
+                                        label="Введите аше ФИО"
+                                        value={fio}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                            setTitle(event.target.value);
+                                            setFio(event.target.value);
                                         }}
                                     />
-                                    <div className={styles.date}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
-                                            <DateTimePicker
-                                                // id={'UF_CRM_DEAL_1712137850471'}
-                                                ampm={false}
-                                                views={['month', 'day', 'hours', 'minutes']}
-                                                sx={{width: '48%'}}
-                                                maxDateTime={dateTo}
-                                                label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
-                                                value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
-                                                onChange={(newValue) => {
-                                                    setDateFrom((prev) => {
-                                                        if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
-                                                        return newValue;
-                                                    });
-                                                }}
-                                                format="DD.MM.YYYY HH:mm"
-                                            />
-                                            <DateTimePicker
-                                                // id={'UF_CRM_DEAL_1712137877584'}
-                                                ampm={false}
-                                                views={['month', 'day', 'hours', 'minutes']}
-                                                sx={{width: '48%'}}
-                                                minDateTime={dateFrom}
-                                                label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
-                                                value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
-                                                onChange={(newValue) => {
-                                                    setDateTo((prev) => {
-                                                        if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
-                                                        return newValue;
-                                                    });
-                                                }}
-                                                format="DD.MM.YYYY HH:mm"
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-
-                                    <div className={styles.row}>
-                                        <p>{'Описание мероприятия'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                        />
-                                    </div>
-
-                                </div>
-                            }
-
-                            {
-                                activeStep === 1 && <div className={styles.root}>
-
-                                    <div className={styles.date}>
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Место проведения"/>}
-                                            sx={{width: '48%'}}
-                                            value={department}
-                                            onChange={(e, type) => {
-                                                setDepartment(type);
-                                            }}
-                                            options={typeDepartment}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Используемые залы"/>}
-                                            sx={{width: '48%'}}
-                                            value={rooms}
-                                            multiple
-                                            onChange={(e, rooms) => {
-                                                setRooms([...rooms]);
-                                            }}
-                                            options={typeRooms}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-                                    </div>
-
-                                    <div className={styles.date}>
-                                        <TextField
-                                            sx={{width: '48%'}}
-                                            type="number"
-                                            label="Количество мест"
-                                            variant="outlined"
-                                            value={places}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                const value = event.target.value;
-                                                setPlaces(value === "" ? value : Number(value));
-                                            }}
-                                            inputProps={{
-                                                step: 1,  // Минимальный шаг изменения значения
-                                                min: 0,   // Минимальное значение
-                                                max: 100  // Максимальное значение
-                                            }}
-                                        />
-
-                                        <TextField
-                                            sx={{width: '48%'}}
-
-                                            type="number"
-                                            label="Цена билета"
-                                            variant="outlined"
-                                            value={cost}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                const value = event.target.value;
-                                                setCost(value === "" ? value : Number(value));
-                                            }}
-                                            inputProps={{
-                                                step: 1,  // Минимальный шаг изменения значения
-                                                min: 0,   // Минимальное значение
-                                                max: 10000  // Максимальное значение
-                                            }}
-                                        />
-                                    </div>
-                                    <div className={styles.row}>
-                                        <p>{'Что будет происходить'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={todo}
-
-                                            onChange={(e) => setTodo(e.target.value)}
-                                        />
-                                    </div>
-
-                                    <div className={styles.row}>
-                                        <p>{'Комментарии'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-
-                                            minRows={5}
-                                            value={comments}
-                                            onChange={(e) => setComments(e.target.value)}
-                                        />
-                                    </div>
+                                }
 
 
-                                    <div className={styles.checkbox}>
-                                        <Checkbox
-                                            sx={{width: '8%'}}
-                                            checked={tech}
-                                            onChange={() => setTech(!tech)}
-                                            inputProps={{'aria-label': 'controlled'}}
-                                        />
-                                        <p>Требуется ли техническое сопровождение</p>
-                                    </div>
-                                    {
-                                        tech && <div className={styles.row}>
-                                            <p>{'Что требуется'}</p>
-                                            <TextareaAutosize
-                                                placeholder={''}
-                                                minRows={5}
-                                                value={addTech}
-                                                onChange={(e) => setAddTech(e.target.value)}
-                                            />
-
-                                        </div>
-                                    }
-
-                                </div>
-                            }
-                            {
-                                activeStep === 2 && <div className={styles.root}>
 
 
-                                    <div className={styles.date}>
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Вид договора"/>}
-                                            sx={{width: '48%'}}
-                                            value={contract}
-                                            onChange={(e, type) => {
-                                                setContract(type);
-                                            }}
-                                            options={typeContract}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-                                        <Autocomplete
-                                            renderInput={(params) => <TextField {...params}
-                                                                                label="Площадки для публикации"/>}
-                                            sx={{width: '48%'}}
-                                            value={publish}
-                                            multiple
-                                            onChange={(e, publishes) => {
-                                                setPublish([...publishes]);
-                                            }}
-                                            options={typePublish}
-                                            getOptionLabel={(option) => option.title}
-                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
-                                                {option.title}</Box>}
-                                        />
-                                    </div>
-                                    <div className={styles.row}>
-                                        <p>{'Реквизиты'}</p>
-                                        <TextareaAutosize
-                                            placeholder={''}
-                                            minRows={5}
-                                            value={requisites}
+                                <div className={styles.date}>
+                                    <Autocomplete
+                                        id={'UF_CRM_DEAL_1712137914328'}
+                                        renderInput={(params) => <TextField {...params} label="Тип события"/>}
+                                        sx={{width: '48%'}}
+                                        value={eventType}
+                                        onChange={(e, type) => {
+                                            setEventType(type);
+                                        }}
+                                        options={typeEvent}
+                                        getOptionLabel={(option) => option.title}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            {option.title}</Box>}
+                                    />
 
-                                            onChange={(e) => setRequisites(e.target.value)}
-                                        />
+                                    <div style={{width: '48%'}}>
+                                        <h3 style={{margin: 0}}>{`Продолжительность `}</h3>
+                                        <span style={{width: '48%'}}>{duration}</span>
                                     </div>
                                 </div>
-                            }
 
-                        </div>
+                                <TextField
+                                    id={'TITLE'}
+                                    label="Введите название мероприятия"
+                                    value={title}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        setTitle(event.target.value);
+                                    }}
+                                />
+                                <div className={styles.date}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
+                                        <DateTimePicker
+                                            // id={'UF_CRM_DEAL_1712137850471'}
+                                            ampm={false}
+                                            views={['month', 'day', 'hours', 'minutes']}
+                                            sx={{width: '48%'}}
+                                            maxDateTime={dateTo}
+                                            label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
+                                            value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
+                                            onChange={(newValue) => {
+                                                setDateFrom((prev) => {
+                                                    if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
+                                                    return newValue;
+                                                });
+                                            }}
+                                            format="DD.MM.YYYY HH:mm"
+                                        />
+                                        <DateTimePicker
+                                            // id={'UF_CRM_DEAL_1712137877584'}
+                                            ampm={false}
+                                            views={['month', 'day', 'hours', 'minutes']}
+                                            sx={{width: '48%'}}
+                                            minDateTime={dateFrom}
+                                            label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
+                                            value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
+                                            onChange={(newValue) => {
+                                                setDateTo((prev) => {
+                                                    if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
+                                                    return newValue;
+                                                });
+                                            }}
+                                            format="DD.MM.YYYY HH:mm"
+                                        />
+                                    </LocalizationProvider>
+                                </div>
 
+                                <div className={styles.row}>
+                                    <p>{'Описание мероприятия'}</p>
+                                    <TextareaAutosize
+                                        placeholder={''}
+                                        minRows={5}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                </div>
 
-                        {
-                            (activeStep === steps.length - 1) &&
-                            <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <Button
-                                    disabled={isStepValid() || loading}
-                                    onClick={addDeal}
-                                    sx={{width: '40%'}}
-                                    variant="contained">
-                                    {
-                                        loading ? 'Идет отправка' : 'Отправить'
-                                    }
-                                </Button>
                             </div>
                         }
 
+                        {
+                            activeStep === 1 && <div className={styles.root}>
 
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                            {
-                                (activeStep !== 0) && <Button
-                                    variant={'outlined'}
-                                    color="inherit"
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{mr: 1}}
-                                >
-                                    Назад
-                                </Button>
-                            }
-                            <Box sx={{flex: '1 1 auto'}}/>
-                            {
-                            ((steps.length - 1) !== activeStep) &&  <Button
-                                    variant={'outlined'}
-                                    onClick={handleNext}
-                                    sx={{mr: 1}}
-                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
-                                    Далее
-                                </Button>
-                            }
+                                <div className={styles.date}>
+                                    <Autocomplete
+                                        renderInput={(params) => <TextField {...params} label="Место проведения"/>}
+                                        sx={{width: '48%'}}
+                                        value={department}
+                                        onChange={(e, type) => {
+                                            setDepartment(type);
+                                        }}
+                                        options={typeDepartment}
+                                        getOptionLabel={(option) => option.title}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            {option.title}</Box>}
+                                    />
 
-                        </Box>
-                    </React.Fragment>
-                )}
-            </div>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
-                      anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
-                <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
-                    Мероприятие успешно зарегистрировано
-                </Alert>
-            </Snackbar>
-        </Box>
+                                    <Autocomplete
+                                        renderInput={(params) => <TextField {...params} label="Используемые залы"/>}
+                                        sx={{width: '48%'}}
+                                        value={rooms}
+                                        multiple
+                                        onChange={(e, rooms) => {
+                                            setRooms([...rooms]);
+                                        }}
+                                        options={typeRooms}
+                                        getOptionLabel={(option) => option.title}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            {option.title}</Box>}
+                                    />
+                                </div>
+
+                                <div className={styles.date}>
+                                    <TextField
+                                        sx={{width: '48%'}}
+                                        type="number"
+                                        label="Количество мест"
+                                        variant="outlined"
+                                        value={places}
+                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                            const value = event.target.value;
+                                            setPlaces(value === "" ? value : Number(value));
+                                        }}
+                                        inputProps={{
+                                            step: 1,  // Минимальный шаг изменения значения
+                                            min: 0,   // Минимальное значение
+                                            max: 100  // Максимальное значение
+                                        }}
+                                    />
+
+                                    <TextField
+                                        sx={{width: '48%'}}
+
+                                        type="number"
+                                        label="Цена билета"
+                                        variant="outlined"
+                                        value={cost}
+                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                            const value = event.target.value;
+                                            setCost(value === "" ? value : Number(value));
+                                        }}
+                                        inputProps={{
+                                            step: 1,  // Минимальный шаг изменения значения
+                                            min: 0,   // Минимальное значение
+                                            max: 10000  // Максимальное значение
+                                        }}
+                                    />
+                                </div>
+                                <div className={styles.row}>
+                                    <p>{'Что будет происходить'}</p>
+                                    <TextareaAutosize
+                                        placeholder={''}
+                                        minRows={5}
+                                        value={todo}
+
+                                        onChange={(e) => setTodo(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className={styles.row}>
+                                    <p>{'Комментарии'}</p>
+                                    <TextareaAutosize
+                                        placeholder={''}
+
+                                        minRows={5}
+                                        value={comments}
+                                        onChange={(e) => setComments(e.target.value)}
+                                    />
+                                </div>
+
+
+                                <div className={styles.checkbox}>
+                                    <Checkbox
+                                        sx={{width: '8%'}}
+                                        checked={tech}
+                                        onChange={() => setTech(!tech)}
+                                        inputProps={{'aria-label': 'controlled'}}
+                                    />
+                                    <p>Требуется ли техническое сопровождение</p>
+                                </div>
+                                {
+                                    tech && <div className={styles.row}>
+                                        <p>{'Что требуется'}</p>
+                                        <TextareaAutosize
+                                            placeholder={''}
+                                            minRows={5}
+                                            value={addTech}
+                                            onChange={(e) => setAddTech(e.target.value)}
+                                        />
+
+                                    </div>
+                                }
+
+                            </div>
+                        }
+                        {
+                            activeStep === 2 && <div className={styles.root}>
+
+
+                                <div className={styles.date}>
+                                    <Autocomplete
+                                        renderInput={(params) => <TextField {...params} label="Вид договора"/>}
+                                        sx={{width: '48%'}}
+                                        value={contract}
+                                        onChange={(e, type) => {
+                                            setContract(type);
+                                        }}
+                                        options={typeContract}
+                                        getOptionLabel={(option) => option.title}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            {option.title}</Box>}
+                                    />
+                                    <Autocomplete
+                                        renderInput={(params) => <TextField {...params}
+                                                                            label="Площадки для публикации"/>}
+                                        sx={{width: '48%'}}
+                                        value={publish}
+                                        multiple
+                                        onChange={(e, publishes) => {
+                                            setPublish([...publishes]);
+                                        }}
+                                        options={typePublish}
+                                        getOptionLabel={(option) => option.title}
+                                        renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                            {option.title}</Box>}
+                                    />
+                                </div>
+                                <div className={styles.row}>
+                                    <p>{'Реквизиты'}</p>
+                                    <TextareaAutosize
+                                        placeholder={''}
+                                        minRows={5}
+                                        value={requisites}
+
+                                        onChange={(e) => setRequisites(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+
+                    {
+                        (activeStep === steps.length - 1) &&
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <Button
+                                disabled={isStepValid() || loading}
+                                onClick={addDeal}
+                                sx={{width: '40%'}}
+                                variant="contained">
+                                {
+                                    loading ? 'Идет отправка' : 'Отправить'
+                                }
+                            </Button>
+                        </div>
+                    }
+
+
+                    <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                        {
+                            (activeStep !== 0) && <Button
+                                variant={'outlined'}
+                                color="inherit"
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{mr: 1}}
+                            >
+                                Назад
+                            </Button>
+                        }
+                        <Box sx={{flex: '1 1 auto'}}/>
+                        {
+                            ((steps.length - 1) !== activeStep) && <Button
+                                variant={'outlined'}
+                                onClick={handleNext}
+                                sx={{mr: 1}}
+                                disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
+                                Далее
+                            </Button>
+                        }
+
+                    </Box>
+                </React.Fragment>
+            )}
+        </div>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+                  anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
+            <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
+                Мероприятие успешно зарегистрировано
+            </Alert>
+        </Snackbar>
+    </Box>
 }
