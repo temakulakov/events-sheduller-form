@@ -283,7 +283,7 @@ export default function Page1() {
                                 {
                                     local ? (users && <Autocomplete
                                         id={'UF_CRM_1714583071'}
-                                        renderInput={(params) => <TextField {...params} label="Сотрудники"/>}
+                                        renderInput={(params) => <TextField {...params} label="Сотрудники*"/>}
                                         multiple
                                         sx={{width: '100%'}}
                                         value={users ? users?.filter(user => selectedUsers.includes(user.id)) : []}
@@ -315,7 +315,7 @@ export default function Page1() {
                                 <div className={styles.date}>
                                     <Autocomplete
                                         id={'UF_CRM_DEAL_1712137914328'}
-                                        renderInput={(params) => <TextField {...params} label="Тип события"/>}
+                                        renderInput={(params) => <TextField {...params} label="Тип события*"/>}
                                         sx={{width: '48%'}}
                                         value={eventType}
                                         onChange={(e, type) => {
@@ -329,7 +329,7 @@ export default function Page1() {
 
                                     <div style={{width: '48%'}}>
                                         <Autocomplete
-                                            renderInput={(params) => <TextField {...params} label="Возрастной рейтинг"/>}
+                                            renderInput={(params) => <TextField {...params} label="Возрастной рейтинг*"/>}
                                             sx={{width: '100%'}}
                                             value={age}
                                             multiple
@@ -347,7 +347,7 @@ export default function Page1() {
 
                                 <TextField
                                     id={'TITLE'}
-                                    label="Введите название мероприятия"
+                                    label="Введите название мероприятия*"
                                     value={title}
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                         setTitle(event.target.value);
@@ -361,7 +361,7 @@ export default function Page1() {
                                             views={['month', 'day', 'hours', 'minutes']}
                                             sx={{width: '48%'}}
                                             maxDateTime={dateTo}
-                                            label={`Дата начала - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
+                                            label={`Дата начала* - ${dateFrom.date()} ${Month[dateFrom.month()]} ${dateFrom.year()} ${WeekDay[dateFrom.day()]}`}
                                             value={dateFrom} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                                             onChange={(newValue) => {
                                                 setDateFrom((prev) => {
@@ -377,7 +377,7 @@ export default function Page1() {
                                             views={['month', 'day', 'hours', 'minutes']}
                                             sx={{width: '48%'}}
                                             minDateTime={dateFrom}
-                                            label={`Дата окончания - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
+                                            label={`Дата окончания* - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
                                             value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
                                             onChange={(newValue) => {
                                                 setDateTo((prev) => {
@@ -393,7 +393,7 @@ export default function Page1() {
                                     <Typography style={{margin: 0}}>{`Продолжительность `}</Typography>
                                     <Typography style={{width: '48%'}}>{duration}</Typography></div>
                                 <div className={styles.row}>
-                                    <p>{'Описание мероприятия'}</p>
+                                    <p>{'Описание мероприятия*'}</p>
                                     <TextareaAutosize
                                         placeholder={''}
                                         minRows={5}
@@ -410,7 +410,7 @@ export default function Page1() {
 
                                 <div className={styles.date}>
                                     <Autocomplete
-                                        renderInput={(params) => <TextField {...params} label="Место проведения"/>}
+                                        renderInput={(params) => <TextField {...params} label="Место проведения*"/>}
                                         sx={{width: '48%'}}
                                         value={department}
                                         onChange={(e, type) => {
@@ -423,7 +423,7 @@ export default function Page1() {
                                     />
 
                                     <Autocomplete
-                                        renderInput={(params) => <TextField {...params} label="Используемые залы"/>}
+                                        renderInput={(params) => <TextField {...params} label="Используемые залы*"/>}
                                         sx={{width: '48%'}}
                                         value={rooms}
                                         multiple
@@ -441,7 +441,7 @@ export default function Page1() {
                                     <TextField
                                         sx={{width: '48%'}}
                                         type="number"
-                                        label="Количество мест"
+                                        label="Количество мест*"
                                         variant="outlined"
                                         value={places}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -459,7 +459,7 @@ export default function Page1() {
                                         sx={{width: '48%'}}
 
                                         type="number"
-                                        label="Цена билета"
+                                        label="Цена билета*"
                                         variant="outlined"
                                         value={cost}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -474,7 +474,7 @@ export default function Page1() {
                                     />
                                 </div>
                                 <div className={styles.row}>
-                                    <p>{'Что будет происходить'}</p>
+                                    <p>{'Что будет происходить*'}</p>
                                     <TextareaAutosize
                                         placeholder={''}
                                         minRows={5}
@@ -525,7 +525,7 @@ export default function Page1() {
 
                                 <div className={styles.date}>
                                     <Autocomplete
-                                        renderInput={(params) => <TextField {...params} label="Вид договора"/>}
+                                        renderInput={(params) => <TextField {...params} label="Вид договора*"/>}
                                         sx={{width: '48%'}}
                                         value={contract}
                                         onChange={(e, type) => {
@@ -552,7 +552,7 @@ export default function Page1() {
                                     />
                                 </div>
                                 <div className={styles.row}>
-                                    <p>{'Реквизиты'}</p>
+                                    <p>{'Реквизиты*'}</p>
                                     <TextareaAutosize
                                         placeholder={''}
                                         minRows={5}
@@ -595,7 +595,7 @@ export default function Page1() {
                             flexDirection: 'column',
                             paddingBottom: '9%'
                         }}>
-                            <div style={{transform: 'scale(3)'}}>
+                            <div style={{transform: 'scale(2.5)'}}>
                                 <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"
                                 >
                                     <circle className={styles.checkmarkCircle} cx="25" cy="25" r="25" fill="none"/>
