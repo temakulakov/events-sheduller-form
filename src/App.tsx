@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import styles from './App.module.scss'
 import Page1 from "./components/Page1/Page1";
 import {
+    ageEventState,
     departmentEventState,
     publishEventState,
     roomEventState, techState,
@@ -17,8 +18,9 @@ function App() {
     const [ typeEvent, setTypeEvent] = useRecoilState(typeEventState);
     const [ departments, setDepartments] = useRecoilState(departmentEventState);
     const [ rooms, setRooms] = useRecoilState(roomEventState);
-    const [contract, setContract] = useRecoilState(typeContractEventState)
-    const [publish, setPublish] = useRecoilState(publishEventState)
+    const [contract, setContract] = useRecoilState(typeContractEventState);
+    const [publish, setPublish] = useRecoilState(publishEventState);
+    const [ age, setAge ] = useRecoilState(ageEventState);
 
     useEffect(() => {
         if (!error && userFields) {
@@ -28,6 +30,7 @@ function App() {
                 if (element.id === 170 && element.list) setRooms(element.list);
                 if (element.id === 172 && element.list) setContract(element.list);
                 if (element.id === 175 && element.list) setPublish(element.list);
+                if (element.id === 208 && element.list) setAge(element.list);
             });
 
         }

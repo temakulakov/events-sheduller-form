@@ -25,3 +25,186 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.checkmark {
+    /*transform: translateX(30px) ;*/
+    //position: absolute;
+    top: 6px;
+    left: 37px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    stroke-width: 2;
+    //stroke: #4C5350;
+    stroke: white;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #FECE30;
+    margin: auto;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    z-index: 10;
+    overflow: visible;
+
+    & > .rollerIndicator {
+        stroke: #F04925;
+    }
+
+    //&:hover .rollerIndicator {
+    //    stroke-dasharray: 1, 1;
+    //}
+}
+
+.checkmarkCircle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: rgba(254, 206, 48, 0);
+    fill: none;
+    animation: stroke .6s ease forwards;
+}
+
+.checkmarkCeck {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke .3s ease .8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px #FECE30;
+    }
+}
+
+
+
+.rollerBg {
+    stroke: #FCC01B;
+    opacity: 0.3;
+}
+
+.rollerIndicator {
+    stroke-dasharray: 0, 1;
+    transition: all .500s ease;
+
+}
+
+.rollerIndicatorFill {
+    stroke-dasharray: 1, 1;
+}
+
+.progress {
+    transform: rotate(-90deg);
+    cursor: pointer;
+    & > .rollerIndicator {
+        stroke: #FCC01B;
+    }
+    //&:hover .rollerIndicator{
+    //    stroke-dasharray: 1, 1;
+    //}
+}
+
+.hover {
+    stroke-dasharray: 1, 1;
+}
+
+circle {
+    stroke-dashoffset: 0;
+    stroke-width: 15%;
+    fill: none;
+}
+
+#progress .indicator {
+    stroke: white;
+
+}
+.roller {
+    display: flex;
+}
+
+
+
+
+
+.checkmark {
+    /*transform: translateX(30px) ;*/
+    //position: absolute;
+
+    top: 6px;
+    left: 37px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    stroke-width: 2;
+    //stroke: #4C5350;
+    stroke: white;
+    stroke-miterlimit: 10;
+    //box-shadow: inset 0px 0px 0px #FECE30;
+    box-shadow: inset 0px 0px 0px #c4c4c4;
+    margin: auto;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    z-index: 10;
+    overflow: visible;
+
+    & > .rollerIndicator {
+        stroke: #F04925;
+    }
+
+    //&:hover .rollerIndicator {
+    //    stroke-dasharray: 1, 1;
+    //}
+}
+
+.checkmarkCircle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: rgba(254, 206, 48, 0);
+    fill: none;
+    animation: stroke .6s ease forwards;
+}
+
+.checkmarkCeck {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke .3s ease .8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        //box-shadow: inset 0px 0px 0px 30px #FECE30;
+        box-shadow: inset 0px 0px 0px 30px rgba(0, 128, 2, 0.84);
+    }
+}

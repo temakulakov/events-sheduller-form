@@ -79,4 +79,5 @@ interface DealFields {
     CREATED_BY: number;
     UF_CRM_DEAL_1712137787958: string;
     UF_CRM_1714654129: string;
+    UF_CRM_1715150460: number[];
 }

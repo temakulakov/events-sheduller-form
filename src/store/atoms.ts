@@ -97,6 +97,10 @@ export const additionalTech = atom<string>({
     default: '',
 })
 
+export const ageState = atom<EventType[]>({
+    key: 'ageState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+});
 
 
 // Массивы полей пользовательских типов crm
@@ -124,5 +128,10 @@ export const typeContractEventState = atom<EventType[]>({
 
 export const publishEventState = atom<EventType[]>({
     key: 'publishEventState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+});
+
+export const ageEventState = atom<EventType[]>({
+    key: 'ageEventState', // unique ID (with respect to other atoms/selectors)
     default: [], // default value (aka initial value)
 });

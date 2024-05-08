@@ -12,6 +12,7 @@ import {
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers"
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 import axios from "axios"
+import CheckIcon from '@mui/icons-material/Check';
 import 'dayjs/locale/ru'
 import React, {useEffect, useState} from "react"
 import {useRecoilState, useRecoilValue} from "recoil"
@@ -19,7 +20,7 @@ import {Month, WeekDay} from "../../consts"
 import {useUserFields} from "../../services/UserFields"
 import {useUsers} from "../../services/Users"
 import {
-    additionalTech,
+    additionalTech, ageEventState, ageState,
     commentsState,
     contractState,
     costState,
@@ -46,6 +47,7 @@ import {
 } from "../../store/atoms"
 import {DealFields} from "../../types"
 import styles from './Page1.module.scss'
+import dayjs from "dayjs";
 
 const steps = ['Мероприятие', 'Дополнительная информация', 'Договор'];
 
@@ -54,7 +56,35 @@ export default function Page1() {
     const [loading, setLoading] = useState(false)
     const [activeStep, setActiveStep] = useState(0);
     const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
-    const [ local, setLocal ] = useState<boolean>(false);
+    const [local, setLocal] = useState<boolean>(false);
+
+    const handleRes = () => {
+        setAge([]);
+        setAddTech('');
+        setFio('');
+        setTech(false);
+        setTodo('');
+        setComments('');
+        setPublish([]);
+        setRequisites('');
+        setCost('');
+        setContract(null);
+        setPlaces('');
+        setRooms([]);
+        setDepartment(null);
+        setDuration('');
+        setEventType(null);
+        setDateTo(dayjs().add(14, 'day'));
+        setDateFrom(dayjs());
+        setDescription('');
+        setTitle('');
+        setSelectedUsers([])
+        setActiveStep(0);
+    };
+
+    const handleRepeat = () => {
+        setActiveStep(0);
+    }
 
     const handleOpen = () => {
         setOpen(true);
@@ -86,6 +116,7 @@ export default function Page1() {
     const typeRooms = useRecoilValue(roomEventState);
     const typeContract = useRecoilValue(typeContractEventState);
     const typePublish = useRecoilValue(publishEventState);
+    const typeAge = useRecoilValue(ageEventState);
 
 
     const {data: users, error, isLoading} = useUsers();
@@ -108,6 +139,7 @@ export default function Page1() {
     const [fio, setFio] = useRecoilState(fioState)
     const [description, setDescription] = useRecoilState(descriptionState)
     const [addTech, setAddTech] = useRecoilState(additionalTech)
+    const [age, setAge] = useRecoilState(ageState);
 
     const handleComplete = () => {
         const newCompleted = completed;
@@ -140,9 +172,9 @@ export default function Page1() {
             case 0:
                 return (selectedUsers.length === 0 && fio === '') || title === '' || description === '' || eventType === null;
             case 1:
-                return todo === '' || comments === '' || department === null || rooms.length === 0 || places === '' || cost === '';
+                return todo === '' || department === null || rooms.length === 0 || places === '' || cost === '';
             case 2:
-                return requisites === '' || publish.length === 0 || contract === null;
+                return requisites === '' || contract === null;
             default:
                 return false;
         }
@@ -192,7 +224,8 @@ export default function Page1() {
         ASSIGNED_BY_ID: 1762,
         CREATED_BY: selectedUsers[0],
         UF_CRM_DEAL_1712137787958: description,
-        UF_CRM_1714654129: addTech
+        UF_CRM_1714654129: addTech,
+        UF_CRM_1715150460: age.map((el) => el.id),
     };
 
 // Функция для отправки запроса
@@ -203,7 +236,8 @@ export default function Page1() {
                 fields: dealData
             });
             handleOpen();
-            setLoading(false)
+            setLoading(false);
+            setActiveStep(activeStep + 1)
         } catch (error) {
             console.error('Ошибка при добавлении сделки:', error);
         }
@@ -278,8 +312,6 @@ export default function Page1() {
                                 }
 
 
-
-
                                 <div className={styles.date}>
                                     <Autocomplete
                                         id={'UF_CRM_DEAL_1712137914328'}
@@ -296,8 +328,20 @@ export default function Page1() {
                                     />
 
                                     <div style={{width: '48%'}}>
-                                        <h3 style={{margin: 0}}>{`Продолжительность `}</h3>
-                                        <span style={{width: '48%'}}>{duration}</span>
+                                        <Autocomplete
+                                            renderInput={(params) => <TextField {...params} label="Возрастной рейтинг"/>}
+                                            sx={{width: '100%'}}
+                                            value={age}
+                                            multiple
+                                            onChange={(e, age) => {
+                                                setAge([...age]);
+                                            }}
+                                            options={typeAge}
+                                            getOptionLabel={(option) => option.title}
+                                            renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
+                                                {option.title}</Box>}
+                                        />
+
                                     </div>
                                 </div>
 
@@ -345,7 +389,9 @@ export default function Page1() {
                                         />
                                     </LocalizationProvider>
                                 </div>
-
+                                <div style={{display: 'flex', gap: '10px'}}>
+                                    <Typography style={{margin: 0}}>{`Продолжительность `}</Typography>
+                                    <Typography style={{width: '48%'}}>{duration}</Typography></div>
                                 <div className={styles.row}>
                                     <p>{'Описание мероприятия'}</p>
                                     <TextareaAutosize
@@ -442,7 +488,6 @@ export default function Page1() {
                                     <p>{'Комментарии'}</p>
                                     <TextareaAutosize
                                         placeholder={''}
-
                                         minRows={5}
                                         value={comments}
                                         onChange={(e) => setComments(e.target.value)}
@@ -537,31 +582,80 @@ export default function Page1() {
                         </div>
                     }
 
+                    {
+                        activeStep === 3 && <div style={{
+                            display: 'flex',
+                            justifyContent: 'end',
+                            alignItems: 'center',
+                            height: '300px',
+                            width: '300px',
+                            background: '#EDF7ED',
+                            margin: '0 auto',
+                            borderRadius: '10px',
+                            flexDirection: 'column',
+                            paddingBottom: '9%'
+                        }}>
+                            <div style={{transform: 'scale(3)'}}>
+                                <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"
+                                >
+                                    <circle className={styles.checkmarkCircle} cx="25" cy="25" r="25" fill="none"/>
+                                    <path className={styles.checkmarkCeck} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                    <circle cx="25" cy="25" r="22" pathLength="1"
+                                            className={`${styles.rollerIndicator}`}></circle>
+                                </svg>
+                            </div>
+                            <Typography color={'green'} sx={{textAlign: 'center', marginTop: '20%'}}>Мероприятие успешно
+                                зарегистрировано</Typography>
+                        </div>
+                    }
 
-                    <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                        {
-                            (activeStep !== 0) && <Button
-                                variant={'outlined'}
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                                sx={{mr: 1}}
-                            >
+
+                    {
+                        activeStep !== 3 ? <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                            {
+                                (activeStep !== 0) && <Button
+                                    variant={'outlined'}
+                                    color="inherit"
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    sx={{mr: 1}}
+                                >
                                 Назад
-                            </Button>
-                        }
-                        <Box sx={{flex: '1 1 auto'}}/>
-                        {
-                            ((steps.length - 1) !== activeStep) && <Button
-                                variant={'outlined'}
-                                onClick={handleNext}
-                                sx={{mr: 1}}
-                                disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
-                                Далее
-                            </Button>
-                        }
-
-                    </Box>
+                                </Button>
+                            }
+                            <Box sx={{flex: '1 1 auto'}}/>
+                            {
+                                ((steps.length - 1) !== activeStep) && <Button
+                                    variant={'outlined'}
+                                    onClick={handleNext}
+                                    sx={{mr: 1}}
+                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
+                                    Далее
+                                </Button>
+                            }
+                        </Box> : <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                            {
+                                 <Button
+                                    variant={'outlined'}
+                                    color="inherit"
+                                    onClick={handleRes}
+                                    sx={{mr: 1}}
+                                 >
+                                    Создать новое мероприятие
+                                </Button>
+                            }
+                            <Box sx={{flex: '1 1 auto'}}/>
+                            {
+                                (steps.length - 1 !== activeStep) && <Button
+                                    variant={'outlined'}
+                                    onClick={handleRepeat}
+                                    sx={{mr: 1}}
+                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
+                                    Повторить текущее мероприятие
+                                </Button>
+                            }
+                        </Box>
+                    }
                 </React.Fragment>
             )}
         </div>
