@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import {EventDepartment, EventRoom, EventType, User} from '../types';
+import {EventDepartment, EventRoom, EventType, ProcessedElement, ProcessedListSection, User} from '../types';
 import dayjs, {Dayjs} from "dayjs";
 
 export const userState = atom<number[]>({
@@ -135,3 +135,16 @@ export const ageEventState = atom<EventType[]>({
     key: 'ageEventState', // unique ID (with respect to other atoms/selectors)
     default: [], // default value (aka initial value)
 });
+
+
+export const sectionState = atom<ProcessedListSection | null> (
+    {
+        key: 'sectionState',
+        default: null
+    });
+
+export const elementsState = atom<ProcessedElement | null> (
+    {
+        key: 'elementsState',
+        default: null
+    });

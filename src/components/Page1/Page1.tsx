@@ -29,7 +29,7 @@ import {
     departmentEventState,
     departmentState,
     descriptionState,
-    durationState,
+    durationState, elementsState,
     eventTypeState,
     fioState,
     placesState,
@@ -37,7 +37,7 @@ import {
     publishState,
     requisitesState,
     roomEventState,
-    roomsState,
+    roomsState, sectionState,
     techState,
     titleState,
     todoState,
@@ -48,6 +48,8 @@ import {
 import {DealFields} from "../../types"
 import styles from './Page1.module.scss'
 import dayjs from "dayjs";
+import {useListSections} from "../../services/ListFilial";
+import {useListElements} from "../../services/ListRooms";
 
 const steps = ['Мероприятие', 'Дополнительная информация', 'Договор'];
 
@@ -120,6 +122,9 @@ export default function Page1() {
 
 
     const {data: users, error, isLoading} = useUsers();
+    const {data: sections, error: errorSections, isLoading: isLoadingSections} = useListSections();
+    const {data: elements, error: errorElements, isLoading: isLoadingElements} = useListElements('0');
+    console.log(sections)
     const [selectedUsers, setSelectedUsers] = useRecoilState(userState);
     const [title, setTitle] = useRecoilState(titleState);
     const [dateFrom, setDateFrom] = useRecoilState(dateFromState);
@@ -140,6 +145,9 @@ export default function Page1() {
     const [description, setDescription] = useRecoilState(descriptionState)
     const [addTech, setAddTech] = useRecoilState(additionalTech)
     const [age, setAge] = useRecoilState(ageState);
+
+    const [ elementState, setElementState ] = useRecoilState(elementsState);
+    const [ sectionsState, setSectionsState ] = useRecoilState(sectionState);
 
     const handleComplete = () => {
         const newCompleted = completed;
@@ -172,7 +180,7 @@ export default function Page1() {
             case 0:
                 return (selectedUsers.length === 0 && fio === '') || title === '' || description === '' || eventType === null;
             case 1:
-                return todo === '' || department === null || rooms.length === 0 || places === '' || cost === '';
+                return todo === '' || sectionsState === null || elementState === null || places === '' || cost === '';
             case 2:
                 return requisites === '' || contract === null;
             default:
@@ -210,8 +218,8 @@ export default function Page1() {
         UF_CRM_DEAL_1712137877584: dateTo.format('YYYY-MM-DD HH:mm'),
         UF_CRM_DEAL_1712137914328: eventType ? eventType.id : 0,
         UF_CRM_1714663307: duration ? duration : '',
-        UF_CRM_DEAL_1712138052482: department ? department.id : 0,
-        UF_CRM_DEAL_1712138132003: rooms.map((el) => el.id),
+        UF_CRM_1715507748: sectionsState ? sectionsState.id : 0,
+        UF_CRM_1715508611: elementState ? elementState.id : 0,
         UF_CRM_DEAL_1712138182738: places !== '' ? places : 0,
         UF_CRM_DEAL_1712138239034: contract ? contract.id : 0,
         OPPORTUNITY: cost !== '' ? cost : 0,
@@ -409,28 +417,53 @@ export default function Page1() {
                             activeStep === 1 && <div className={styles.root}>
 
                                 <div className={styles.date}>
+                                    {/*<Autocomplete*/}
+                                    {/*    renderInput={(params) => <TextField {...params} label="Место проведения*"/>}*/}
+                                    {/*    sx={{width: '48%'}}*/}
+                                    {/*    value={department}*/}
+                                    {/*    onChange={(e, type) => {*/}
+                                    {/*        setDepartment(type);*/}
+                                    {/*    }}*/}
+                                    {/*    options={typeDepartment}*/}
+                                    {/*    getOptionLabel={(option) => option.title}*/}
+                                    {/*    renderOption={(props, option) => <Box component="li" {...props} key={option.id}>*/}
+                                    {/*        {option.title}</Box>}*/}
+                                    {/*/>*/}
+
                                     <Autocomplete
                                         renderInput={(params) => <TextField {...params} label="Место проведения*"/>}
                                         sx={{width: '48%'}}
-                                        value={department}
+                                        value={sectionsState}
                                         onChange={(e, type) => {
-                                            setDepartment(type);
+                                            setSectionsState(type);
                                         }}
-                                        options={typeDepartment}
+                                        options={sections ? sections : []}
                                         getOptionLabel={(option) => option.title}
                                         renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
                                             {option.title}</Box>}
                                     />
 
+                                    {/*<Autocomplete*/}
+                                    {/*    renderInput={(params) => <TextField {...params} label="Используемые залы*"/>}*/}
+                                    {/*    sx={{width: '48%'}}*/}
+                                    {/*    value={rooms}*/}
+                                    {/*    multiple*/}
+                                    {/*    onChange={(e, rooms) => {*/}
+                                    {/*        setRooms([...rooms]);*/}
+                                    {/*    }}*/}
+                                    {/*    options={typeRooms}*/}
+                                    {/*    getOptionLabel={(option) => option.title}*/}
+                                    {/*    renderOption={(props, option) => <Box component="li" {...props} key={option.id}>*/}
+                                    {/*        {option.title}</Box>}*/}
+                                    {/*/>*/}
                                     <Autocomplete
-                                        renderInput={(params) => <TextField {...params} label="Используемые залы*"/>}
+                                        renderInput={(params) => <TextField {...params} label="Место проведения*"/>}
                                         sx={{width: '48%'}}
-                                        value={rooms}
-                                        multiple
-                                        onChange={(e, rooms) => {
-                                            setRooms([...rooms]);
+                                        value={elementState}
+                                        onChange={(e, type) => {
+                                            setElementState(type);
                                         }}
-                                        options={typeRooms}
+                                        options={elements ? elements.filter(el => sectionsState && (el.sectionId === String(sectionsState.id))) : []}
                                         getOptionLabel={(option) => option.title}
                                         renderOption={(props, option) => <Box component="li" {...props} key={option.id}>
                                             {option.title}</Box>}
