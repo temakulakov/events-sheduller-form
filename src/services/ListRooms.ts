@@ -14,9 +14,6 @@ const processListElements = (elements: ListElement[]): ProcessedElement[] => {
         id: parseInt(element.ID),
         title: element.NAME,
         sectionId: element.IBLOCK_SECTION_ID,
-        timeStart: dayjs(processDateTime(element.PROPERTY_316['14677'])),
-        timeFinish: dayjs(processDateTime(element.PROPERTY_317['14678'])),
-        color: element.PROPERTY_318['14679'],
     }));
 };
 

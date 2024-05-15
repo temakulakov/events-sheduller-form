@@ -124,7 +124,7 @@ export default function Page1() {
     const {data: users, error, isLoading} = useUsers();
     const {data: sections, error: errorSections, isLoading: isLoadingSections} = useListSections();
     const {data: elements, error: errorElements, isLoading: isLoadingElements} = useListElements('0');
-    console.log(sections)
+    console.log(elements)
     const [selectedUsers, setSelectedUsers] = useRecoilState(userState);
     const [title, setTitle] = useRecoilState(titleState);
     const [dateFrom, setDateFrom] = useRecoilState(dateFromState);
@@ -457,7 +457,7 @@ export default function Page1() {
                                     {/*        {option.title}</Box>}*/}
                                     {/*/>*/}
                                     <Autocomplete
-                                        renderInput={(params) => <TextField {...params} label="Место проведения*"/>}
+                                        renderInput={(params) => <TextField {...params} label="Используемый зал*"/>}
                                         sx={{width: '48%'}}
                                         value={elementState}
                                         onChange={(e, type) => {

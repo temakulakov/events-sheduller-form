@@ -166,9 +166,7 @@ interface ProcessedElement {
     id: number;
     title: string;
     sectionId: string;
-    timeStart: Dayjs; // значение как timeStart
-    timeFinish: Dayjs; // значение как timeFinish
-    color: string; // значение как color
+
 }
 
 // Тип данных для ответа от API
