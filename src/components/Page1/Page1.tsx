@@ -240,7 +240,7 @@ export default function Page1() {
     const addDeal = async () => {
         try {
             setLoading(true)
-            const response = await axios.post('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.add', {
+            const response = await axios.post('https://intranet.gctm.ru/rest/1762/131ztq7yt4pleqzt/crm.deal.add', {
                 fields: dealData
             });
             handleOpen();
