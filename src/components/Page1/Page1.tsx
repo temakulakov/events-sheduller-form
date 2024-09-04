@@ -94,10 +94,11 @@ export default function Page1() {
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
-        const paramValue = searchParams.get('local');
         const user = searchParams.get('user');
-        if (paramValue == 'true') {
+        if (user) {
             setLocal(true);
+        } else {
+            setLocal(false);
         }
         if (user) {
             setSelectedUsers([Number(user)]);
