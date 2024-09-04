@@ -6,7 +6,7 @@ const fetchUsers = async (): Promise<User[]> => {
     let allUsers: User[] = [];
     let start = 0;
     let hasMore = true;
-    const endpoint = 'https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/user.get';
+    const endpoint = 'https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/user.get';
 
     while (hasMore) {
         const params = {start, filter: {user_type: 'employee', active: true}};

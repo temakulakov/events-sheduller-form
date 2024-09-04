@@ -3,7 +3,7 @@
     import {UserField, UserFieldAPI, UserFieldsResponse} from "../types";
 
     const fetchUserFields = async (): Promise<UserField[]> => {
-        const { data } = await axios.get<{ result: UserFieldAPI[] }>('https://intranet.gctm.ru/rest/1552/0ja3gbkg3kxex6aj/crm.deal.userfield.list');
+        const { data } = await axios.get<{ result: UserFieldAPI[] }>('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/crm.deal.userfield.list');
         return data.result.map(field => ({
                 id: parseInt(field.ID),
                 title: field.FIELD_NAME,
