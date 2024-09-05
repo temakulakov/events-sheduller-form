@@ -25,12 +25,12 @@ function App() {
     useEffect(() => {
         if (!error && userFields) {
             userFields.forEach((element, index) => {
-                if (element.id === 167 && element.list) setTypeEvent(element.list);
-                if (element.id === 169 && element.list) setDepartments(element.list);
-                if (element.id === 170 && element.list) setRooms(element.list);
-                if (element.id === 172 && element.list) setContract(element.list);
-                if (element.id === 175 && element.list) setPublish(element.list);
-                if (element.id === 208 && element.list) setAge(element.list);
+                if (element.id === 129 && element.list) setTypeEvent(element.list);
+                if (element.id === 131 && element.list) setDepartments(element.list);
+                if (element.id === 132 && element.list) setRooms(element.list);
+                if (element.id === 133 && element.list) setContract(element.list);
+                if (element.id === 134 && element.list) setPublish(element.list);
+                if (element.id === 144 && element.list) setAge(element.list);
             });
 
         }

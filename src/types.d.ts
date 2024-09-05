@@ -57,35 +57,35 @@ interface UserFieldAPI {
 
 interface DealFields {
     TITLE: string;
-    CATEGORY_ID: 7;
-    STAGE_ID: 'new';
+    // CATEGORY_ID: 1;
+    STAGE_ID: 'NEW';
     UF_CRM_1714583071: number[];    // Список ответственных сотрудников
-    UF_CRM_DEAL_1712137850471: string; // Дата начала
-    UF_CRM_DEAL_1712137877584: string; // Дата окончания
-    UF_CRM_DEAL_1712137914328: number; // Тип мероприятия
-    UF_CRM_1714663307: string; // Длительность
+    UF_CRM_1725425014: string; // Дата начала
+    UF_CRM_1725425039: string; // Дата окончания
+    UF_CRM_1725447833: number; // Тип мероприятия
+    UF_CRM_1725461803: string; // Длительность
 
     // UF_CRM_DEAL_1712138052482: number; // Отвественный отдел
     // UF_CRM_DEAL_1712138132003: number[]; // Используемые залы
 
-    UF_CRM_1715507748: number;
-    UF_CRM_1715508611: number; // Используемые залы
+    UF_CRM_1725448176: number; // Место проведения
+    UF_CRM_1725448271: number; // Используемые залы
 
-    UF_CRM_DEAL_1712138182738: number; // Количество мест
-    UF_CRM_DEAL_1712138239034: number; // Вид договора
+    UF_CRM_1725464299: number; // Количество мест
+    UF_CRM_1725448865: number; // Вид договора
     OPPORTUNITY: number; // Цена в рублях
     // UF_CRM_DEAL_1712138296842: number; // Цена в рублях
-    UF_CRM_DEAL_1712138336714: string; // Реквизиты
-    UF_CRM_DEAL_1712138395258: number[]; // Площадки для публикаций
-    UF_CRM_DEAL_1712138457130: 'Y' | 'N'; // Требуется ли техническое сопровождение
-    UF_CRM_DEAL_1712138504154: string; // Комментарии
-    UF_CRM_DEAL_1712138530562: string; // Что будет происходить
-    UF_CRM_1714648360: string; // ФИО
+    UF_CRM_1725464394: string; // Реквизиты
+    UF_CRM_1725450210: number[]; // Площадки для публикаций
+    UF_CRM_1725464426: 'Y' | 'N'; // Требуется ли техническое сопровождение
+    UF_CRM_1725464456: string; // Комментарии
+    UF_CRM_1725464469: string; // Что будет происходить
+    UF_CRM_1725464495: string; // ФИО
     ASSIGNED_BY_ID: 1762;
     CREATED_BY: number;
-    UF_CRM_DEAL_1712137787958: string;
-    UF_CRM_1714654129: string;
-    UF_CRM_1715150460: number[];
+    UF_CRM_1725522371: string;
+    UF_CRM_1725522431: string;
+    UF_CRM_1725522651: number[];
 }
 
 interface ListSection {

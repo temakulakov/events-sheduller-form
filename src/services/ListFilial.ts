@@ -14,7 +14,7 @@ const processListSections = (sections: ListSection[]): ProcessedListSection[] =>
 
 // Функция для получения секций списка
 const fetchListSections = async (): Promise<ProcessedListSection[]> => {
-    const { data } = await axios.get<ListSectionsResponse>('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.section.get.json?IBLOCK_TYPE_ID=lists&IBLOCK_ID=78');
+    const { data } = await axios.get<ListSectionsResponse>('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.section.get.json?IBLOCK_TYPE_ID=lists&IBLOCK_ID=80');
     return processListSections(data.result);
 };
 

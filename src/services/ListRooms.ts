@@ -19,7 +19,7 @@ const processListElements = (elements: ListElement[]): ProcessedElement[] => {
 
 // Функция для получения элементов списка
 const fetchListElements = async (sectionId: string): Promise<ProcessedElement[]> => {
-    const { data } = await axios.get<ListElementsResponse>(`https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.element.get.json?IBLOCK_TYPE_ID=lists&IBLOCK_ID=78&SECTION_ID=${sectionId}`);
+    const { data } = await axios.get<ListElementsResponse>(`https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.element.get.json?IBLOCK_TYPE_ID=lists&IBLOCK_ID=80&SECTION_ID=${sectionId}`);
     return processListElements(data.result);
 };
 
