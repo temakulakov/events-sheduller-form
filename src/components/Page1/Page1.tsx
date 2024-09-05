@@ -212,8 +212,8 @@ export default function Page1() {
 // Данные для новой сделки
     const dealData: DealFields = {
         TITLE: title,
-        // CATEGORY_ID: 1,
-        STAGE_ID: 'NEW',
+        CATEGORY_ID: 1,
+        // STAGE_ID: 'NEW',
         UF_CRM_1714583071: selectedUsers,
         UF_CRM_1725425014: dateFrom.format('YYYY-MM-DD HH:mm'),
         UF_CRM_1725425039: dateTo.format('YYYY-MM-DD HH:mm'),

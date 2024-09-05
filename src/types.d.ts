@@ -57,8 +57,8 @@ interface UserFieldAPI {
 
 interface DealFields {
     TITLE: string;
-    // CATEGORY_ID: 1;
-    STAGE_ID: 'NEW';
+    CATEGORY_ID: 1;
+    // STAGE_ID: 'NEW';
     UF_CRM_1714583071: number[];    // Список ответственных сотрудников
     UF_CRM_1725425014: string; // Дата начала
     UF_CRM_1725425039: string; // Дата окончания
