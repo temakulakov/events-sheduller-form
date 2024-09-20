@@ -214,7 +214,7 @@ export default function Page1() {
         TITLE: title,
         CATEGORY_ID: 1,
         // STAGE_ID: 'NEW',
-        UF_CRM_1714583071: selectedUsers,
+        UF_CRM_1725535570: selectedUsers,
         UF_CRM_1725425014: dateFrom.format('YYYY-MM-DD HH:mm'),
         UF_CRM_1725425039: dateTo.format('YYYY-MM-DD HH:mm'),
         UF_CRM_1725447833: eventType ? eventType.id : 0,
