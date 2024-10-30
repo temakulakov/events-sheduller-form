@@ -256,16 +256,7 @@ export default function Page1() {
     if (error) return <h1>Ошибка загрузки пользователей</h1>
 
     return <Box sx={{width: '100%'}}>
-        <Stepper nonLinear activeStep={activeStep}>
-            {steps.map((label, index) => (
-                <Step key={label} completed={completed[index]}>
-                    <StepButton color="inherit"
-                                style={index === 0 ? {padding: '16px', paddingLeft: '12px'} : {padding: '16px'}}>
-                        {label}
-                    </StepButton>
-                </Step>
-            ))}
-        </Stepper>
+        
         <div>
             {allStepsCompleted() ? (
                 <React.Fragment>
@@ -288,7 +279,7 @@ export default function Page1() {
                             </h1>
                         </div>
                         {
-                            activeStep === 0 && <div className={styles.root}>
+                             <div className={styles.root}>
                                 {
                                     local ? (users && <Autocomplete
                                         id={'UF_CRM_1714583071'}
@@ -415,7 +406,7 @@ export default function Page1() {
                         }
 
                         {
-                            activeStep === 1 && <div className={styles.root}>
+                             <div className={styles.root}>
 
                                 <div className={styles.date}>
                                     {/*<Autocomplete*/}
@@ -554,7 +545,7 @@ export default function Page1() {
                             </div>
                         }
                         {
-                            activeStep === 2 && <div className={styles.root}>
+                            <div className={styles.root}>
 
 
                                 <div className={styles.date}>
@@ -602,7 +593,7 @@ export default function Page1() {
 
 
                     {
-                        (activeStep === steps.length - 1) &&
+                       
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                             <Button
                                 disabled={isStepValid() || loading}
@@ -644,60 +635,10 @@ export default function Page1() {
                     }
 
 
-                    {
-                        activeStep !== 3 ? <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                            {
-                                (activeStep !== 0) && <Button
-                                    variant={'outlined'}
-                                    color="inherit"
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{mr: 1}}
-                                >
-                                Назад
-                                </Button>
-                            }
-                            <Box sx={{flex: '1 1 auto'}}/>
-                            {
-                                ((steps.length - 1) !== activeStep) && <Button
-                                    variant={'outlined'}
-                                    onClick={handleNext}
-                                    sx={{mr: 1}}
-                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
-                                    Далее
-                                </Button>
-                            }
-                        </Box> : <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                            {
-                                 <Button
-                                    variant={'outlined'}
-                                    color="inherit"
-                                    onClick={handleRes}
-                                    sx={{mr: 1}}
-                                 >
-                                    Создать новое мероприятие
-                                </Button>
-                            }
-                            <Box sx={{flex: '1 1 auto'}}/>
-                            {
-                                (steps.length - 1 !== activeStep) && <Button
-                                    variant={'outlined'}
-                                    onClick={handleRepeat}
-                                    sx={{mr: 1}}
-                                    disabled={isStepValid() || ((steps.length - 1) === activeStep)}>
-                                    Повторить текущее мероприятие
-                                </Button>
-                            }
-                        </Box>
-                    }
+                    
                 </React.Fragment>
             )}
         </div>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
-                  anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
-            <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
-                Мероприятие успешно зарегистрировано
-            </Alert>
-        </Snackbar>
+       
     </Box>
 }
