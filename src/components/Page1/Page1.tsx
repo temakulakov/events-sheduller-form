@@ -392,7 +392,7 @@ export default function Page1() {
                                 <div style={{display: 'flex', gap: '10px'}}>
                                     <Typography style={{margin: 0}}>{`Продолжительность `}</Typography>
                                     <Typography style={{width: '48%'}}>{duration}</Typography></div>
-                                <div className={styles.row}>
+                                <div className={styles.row} style={{marginBottom: '20px'}}>
                                     <p>{'Описание мероприятия*'}</p>
                                     <TextareaAutosize
                                         placeholder={''}
@@ -530,7 +530,7 @@ export default function Page1() {
                                     <p>Требуется ли техническое сопровождение</p>
                                 </div>
                                 {
-                                    tech && <div className={styles.row}>
+                                    tech && <div className={styles.row} style={{ marginBottom: '10px'}}>
                                         <p>{'Что требуется'}</p>
                                         <TextareaAutosize
                                             placeholder={''}
@@ -545,7 +545,7 @@ export default function Page1() {
                             </div>
                         }
                         {
-                            <div className={styles.root}>
+                            <div className={styles.root} style={{ marginTop: '10px'}}>
 
 
                                 <div className={styles.date}>
