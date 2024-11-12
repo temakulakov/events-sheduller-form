@@ -112,6 +112,8 @@ export default function Page1() {
         setOpen(false);
     };
 
+
+
 // Вызов функции добавления сделки
 
     const typeEvent = useRecoilValue(typeEventState);
@@ -251,9 +253,15 @@ export default function Page1() {
             console.error('Ошибка при добавлении сделки:', error);
         }
     }
+    useEffect(() => {
+        setDateTo(prev => prev.date(dateFrom.date()));
+    }, [dateFrom]);
 
     const {data} = useUserFields()
     if (error) return <h1>Ошибка загрузки пользователей</h1>
+
+
+
 
     return <Box sx={{width: '100%'}}>
         
