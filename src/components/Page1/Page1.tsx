@@ -9,7 +9,7 @@ import {
     TextareaAutosize,
     Typography
 } from "@mui/material"
-import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers"
+import {DateTimePicker, DesktopTimePicker, LocalizationProvider} from "@mui/x-date-pickers"
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 import axios from "axios"
 import CheckIcon from '@mui/icons-material/Check';
@@ -216,7 +216,7 @@ export default function Page1() {
         // STAGE_ID: 'NEW',
         UF_CRM_1725535570: selectedUsers,
         UF_CRM_1725425014: dateFrom.format('YYYY-MM-DD HH:mm'),
-        UF_CRM_1725425039: dateTo.format('YYYY-MM-DD HH:mm'),
+        UF_CRM_1725425039: dateTo.date(dateFrom.date()).format('YYYY-MM-DD HH:mm'),
         UF_CRM_1725447833: eventType ? eventType.id : 0,
         UF_CRM_1725461803: duration ? duration : '',
         UF_CRM_1725448176: sectionsState ? sectionsState.id : 0,
@@ -353,7 +353,7 @@ export default function Page1() {
                                         setTitle(event.target.value);
                                     }}
                                 />
-                                <div className={styles.date}>
+                                <div className={styles.date} style={{ justifyContent: 'flex-start' }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"ru"}>
                                         <DateTimePicker
                                             // id={'UF_CRM_DEAL_1712137850471'}
@@ -371,22 +371,36 @@ export default function Page1() {
                                             }}
                                             format="DD.MM.YYYY HH:mm"
                                         />
-                                        <DateTimePicker
-                                            // id={'UF_CRM_DEAL_1712137877584'}
+                                        <DesktopTimePicker
+                                            label="Время окончания"
+                                            value={dateTo}
+                                            sx={{ marginLeft: '35px'}}
                                             ampm={false}
-                                            views={['month', 'day', 'hours', 'minutes']}
-                                            sx={{width: '48%'}}
-                                            minDateTime={dateFrom}
-                                            label={`Дата окончания* - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}
-                                            value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается
+                                            views={['hours', 'minutes' ]}
                                             onChange={(newValue) => {
                                                 setDateTo((prev) => {
                                                     if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null
                                                     return newValue;
                                                 });
                                             }}
-                                            format="DD.MM.YYYY HH:mm"
+                                            // renderInput={(params) => <TextField {...params} />}
                                         />
+                                        {/*<DateTimePicker*/}
+                                        {/*    // id={'UF_CRM_DEAL_1712137877584'}*/}
+                                        {/*    ampm={false}*/}
+                                        {/*    views={['month', 'day', 'hours', 'minutes']}*/}
+                                        {/*    sx={{width: '48%'}}*/}
+                                        {/*    minDateTime={dateFrom}*/}
+                                        {/*    label={`Дата окончания* - ${dateTo.date()} ${Month[dateTo.month()]} ${dateTo.year()} ${WeekDay[dateTo.day()]}`}*/}
+                                        {/*    value={dateTo} // Убедитесь, что selectedEvent?.DATE_FROM корректно обрабатывается*/}
+                                        {/*    onChange={(newValue) => {*/}
+                                        {/*        setDateTo((prev) => {*/}
+                                        {/*            if (!prev || !newValue) return prev; // Возвращаем prev, если оно равно null или newValue равно null*/}
+                                        {/*            return newValue;*/}
+                                        {/*        });*/}
+                                        {/*    }}*/}
+                                        {/*    format="DD.MM.YYYY HH:mm"*/}
+                                        {/*/>*/}
                                     </LocalizationProvider>
                                 </div>
                                 <div style={{display: 'flex', gap: '10px'}}>
