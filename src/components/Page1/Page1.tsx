@@ -243,7 +243,7 @@ export default function Page1() {
     const addDeal = async () => {
         try {
             setLoading(true)
-            const response = await axios.post('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/crm.deal.add', {
+            const response = await axios.post('https://intranet.bakhrushinmuseum.ru/rest/1/e3stpev74xjsn8m2/crm.deal.add', {
                 fields: dealData
             });
             handleOpen();
